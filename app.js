@@ -24,6 +24,10 @@ var db;
 
 connectDB();
 
+
+// This module is just here for dev. Please remove once done
+const simpleGit = require('simple-git');
+
 async function connectDB() {
     await client.connect();
     await client.db("admin").command({ ping: 1 });
@@ -110,6 +114,21 @@ app.post("/sendreaction", function(req, res) {
 app.post("/sendreply", function(req, res) {
     res.send("Hmm. You shouldn't be here! This page is still under development");
     // Send the new reply for a post to the server
+});
+
+
+
+// This route is only here for dev. Please remove once done
+app.post("/reload-git", async function(req, res) {
+    console.log("Starting pull");
+    simpleGit().pull((err, update) => {
+        if (update && update.summary.changes) {
+            require("touch")("./tmp/restart.txt", null, ()=>{});
+            console.log("Touched restart.txt");
+            console.log("Done with pull");
+            res.send("");
+        }
+    });
 });
 
 

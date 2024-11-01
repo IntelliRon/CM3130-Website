@@ -24,10 +24,6 @@ var db;
 
 connectDB();
 
-
-// This module is just here for dev. Please remove once done
-const simpleGit = require('simple-git');
-
 async function connectDB() {
     await client.connect();
     await client.db("admin").command({ ping: 1 });
@@ -43,7 +39,9 @@ async function connectDB() {
 /* GET Routes */
 
 app.get("/", /*async*/ function(req, res) {
-    res.render("pages/dev");
+    // res.render("pages/dev");
+
+    res.send("Hello world");
 
     /* DATABASE TESTING */
 
@@ -121,7 +119,7 @@ app.post("/sendreply", function(req, res) {
 // This route is only here for dev. Please remove once done
 app.post("/reload-git", async function(req, res) {
     console.log("Starting pull");
-    simpleGit().pull((err, update) => {
+    require('simple-git')().pull((err, update) => {
         if (update && update.summary.changes) {
             require("touch")("./tmp/restart.txt", null, ()=>{});
             console.log("Touched restart.txt");

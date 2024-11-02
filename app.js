@@ -118,13 +118,13 @@ app.post("/sendreply", function(req, res) {
 
 // This route is only here for dev. Please remove once done
 app.post("/reload-git", async function(req, res) {
+    res.status(202).send("Accepted");
     console.log("Starting pull");
     require('simple-git')().pull((err, update) => {
         if (update && update.summary.changes) {
             require("touch")("./tmp/restart.txt", null, ()=>{});
             console.log("Touched restart.txt");
             console.log("Done with pull");
-            res.send("");
         }
     });
 });

@@ -39,9 +39,7 @@ async function connectDB() {
 /* GET Routes */
 
 app.get("/", /*async*/ function(req, res) {
-    // res.render("pages/dev");
-
-    res.send("Hello world");
+    res.render("pages/dev");
 
     /* DATABASE TESTING */
 

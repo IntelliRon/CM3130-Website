@@ -1,0 +1,124 @@
+html {
+    --main-background: #093E6C;
+    --secondary-background: #094375;
+    --tertiary-background: #26537B;
+    font-family: Helvetica;
+}
+
+body {
+    margin: 0;
+    background-color: var(--main-background);
+}
+
+a {
+    color: #E2BE44;
+}
+
+#NavBar {
+    display: flex;
+    background-color: var(--secondary-background);
+}
+
+#NavBar h1{
+    color: #FFFFFF;
+}
+
+#NavPanelButtonDiv{
+    align-content: center;
+}
+
+#NavPanelButtonDiv:hover{
+    background-color: #9BB2E4;
+    cursor: pointer;
+}
+
+#NavPanelButton {
+    margin: 0;
+    padding: 5px 15px;
+}
+
+#NavTitleDiv{
+    display: flex;
+    justify-content: center;
+    flex: auto;
+}
+
+#NavTitleTextDiv{
+    margin: 0;
+    align-content: center;
+}
+
+#NavTitleText{
+    margin: 0;
+}
+
+#NavLogo {
+    height: 64px;
+    margin: 5px;
+}
+
+#NavSideBar {
+    background-color: var(--secondary-background);
+    width: 20%;
+    z-index: 2;
+    height: 100%;
+    position: fixed;
+}
+
+#SidebarProfileIcon {
+    height: 32px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+#SidebarSettingIcon {
+    height: 32px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.sideBarButton {
+    padding: 15px;
+    background-color: #9BB2E4;
+}
+
+.sideBarButton p {
+    color: #FFFFFF;
+}
+
+.sideBarButton:hover{
+    background-color: #9DEFCD;
+    cursor: pointer;
+}
+
+.sideBarButton:hover p {
+    color: #428938;
+}
+
+.closed {
+    display: none;
+}
+
+.opened {
+    display: flex;
+    flex-direction: column;
+}
+
+footer {
+    background-color: #073358;
+    padding: 30px;
+    position: relative;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#FooterLogo {
+    width: 64px;
+}
+
+#FooterText {
+    color: #FFF;
+    text-align: center;
+}

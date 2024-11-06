@@ -35,6 +35,8 @@ async function connectDB() {
     });
 }
 
+// Tell express to allow use of the public folder for things such as scripts
+app.use(express.static('public'));
 
 /* GET Routes */
 

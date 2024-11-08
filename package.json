@@ -1,0 +1,22 @@
+{
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.21.1",
+    "http": "^0.0.1-security",
+    "mongodb": "^6.10.0",
+    "simple-git": "^3.27.0",
+    "touch": "^3.1.1"
+  },
+  "name": "client-website",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "author": "Notshuré",
+  "license": "ISC",
+  "description": ""
+}

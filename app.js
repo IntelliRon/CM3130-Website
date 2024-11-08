@@ -1,8 +1,26 @@
+var fs = require('fs');
+var util = require('util');
+var log_file = fs.createWriteStream(__dirname + '/debug.log', {flags : 'w'});
+var log_stdout = process.stdout;
+
+// Override the console.log method to write to a debug file instead
+console.log = function(d) { //
+  log_file.write(new Date().toISOString() + " - " + util.format(d) + '\n');
+  log_stdout.write(new Date().toISOString() + " - " + util.format(d) + '\n');
+};
+console.error = console.log;
+
+
+
+
 console.log("Server is initialising...")
 
-const SERVER_PORT = 8080;
+require('dotenv').config();
+
+const SERVER_PORT = process.env.PORT | 8080;
+const DB_PASSWORD = process.env.DATABASE_PASSWORD;
 const { MongoClient, ServerApiVersion } = require('mongodb'); // npm install mongodb
-const url = "mongodb+srv://gulpsabook:siVC2Hx2xDMcfotx@cluster0.vtqin.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+const url = "mongodb+srv://" + process.env.DATABASE_USERNAME + ":" + process.env.DATABASE_PASSWORD + "@cluster0.vtqin.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 const client = new MongoClient(url, {
     serverApi: {
         version: ServerApiVersion.v1,
@@ -13,6 +31,7 @@ const client = new MongoClient(url, {
 const dbname = "sample_mflix";
 
 const express = require('express'); //npm install express
+const bcrypt = require('bcrypt'); // npm install bcrypt
 
 var app = express();
 
@@ -51,7 +70,12 @@ app.get("/", /*async*/ function(req, res) {
     // res.send(result);
 });
 
-app.get("/forum", function(req, res) {
+app.get("/forum/placements", function(req, res) {
+    res.render("pages/dev");
+    // Render the main forum page here
+});
+
+app.get("/forum/accomodation", function(req, res) {
     res.render("pages/dev");
     // Render the main forum page here
 });
@@ -84,14 +108,100 @@ app.post("/loadthreads", function(req, res) {
     // Sideload all the threads here (remember to use pagination. Don't load ALL posts at once)
 });
 
-app.post("/dologin", function(req, res) {
-    res.send("Hmm. You shouldn't be here! This page is still under development");
-    // Validate the login for the user and reroute them (from the homepage to the forum page)
+app.post("/dologin", async function(req, res) {
+    // Validate the login for the user and reroute them (from the homepage to the profile page)
+
+    // Get the username and password from the request
+    let uname = req.body.username;
+    let pword = req.body.password;
+
+    // Search the database to find a user with this name
+    let result = await db.collection('Users').findOne({"username": uname});
+
+    let failReason = "";
+    let redirectURL = "";
+
+    if (!result) {
+        reason += "username or password is incorrect";
+        encodeURI(reason)
+        redirectURL += "/login?reason="+reason;
+        res.redirect(redirectURL);
+        return;
+    }
+
+    // Check if the password is the same
+    bcrypt.compare(pword, result.password, function(err, checkPassword) {
+        if (checkPassword) { // Log the user in, if the password is correct
+            req.session.loggedin = true;
+            req.session.uname = uname;
+            req.session.userLevel = result.userLevel;
+            res.redirect('/profile');
+        } else { // The password is wrong
+            reason += "username or password is incorrect";
+            encodeURI(reason);
+            redirectURL += "/?reason="+reason;
+            res.redirect(redirectURL);
+
+            return;
+        }
+    });
 });
 
-app.post("/doregister", function(req, res) {
-    res.send("Hmm. You shouldn't be here! This page is still under development");
-    // Register the new user
+app.post("/doregister", async function(req, res) {
+    // Register the new user and log them in. Reroute them to the profile page
+
+    let fname = req.body.first_name;
+    let lname = req.body.last_name;
+    let email = req.body.email;
+    let pword = req.body.password;
+    let uni = req.body.university;
+    
+    let result = await db.collection('Users').findOne({
+        "username": uname
+    });
+
+    let failReason = "";
+    let redirectURL = "";
+
+    if (result) { // The user already exists
+        reason += "already exists";
+        encodeURI(reason);
+        redirectURL += "/register?reason="+reason;
+    } else {
+        // 9 rounds of salting should be enough
+        bcrypt.hash(pword, 9, async function(err, hash) {
+            if (err) {
+                console.log(err);
+                res.status(500);
+                res.send("500: Internal server error");
+                return;
+            }
+
+            // Store the new user in the database
+            try {
+                let result = await db.collection('Users').insertOne({
+                    "firstName": fname,
+                    "lastName": lname,
+                    "email": email,
+                    "password": hash,
+                    "university": uni,
+                    "placementLocationID": null,
+                    "userLevel": 1 // Moderation
+                });
+            } catch (err) {
+                console.log(err);
+                res.status(500);
+                res.send("500: Internal server error");
+                return;
+            }
+
+            // Log the new user in
+            req.session.loggedin = true;
+            req.session.uname = uname;
+            req.session.userLevel = 1;
+            res.redirect("/profile");
+        });
+    }
 });
 
 app.post("/douseredit", function(req, res) {
@@ -113,23 +223,6 @@ app.post("/sendreply", function(req, res) {
     res.send("Hmm. You shouldn't be here! This page is still under development");
     // Send the new reply for a post to the server
 });
-
-
-
-// This route is only here for dev. Please remove once done
-app.post("/reload-git", async function(req, res) {
-    res.status(202).send("Accepted");
-    console.log("Starting pull");
-    require('simple-git')().pull((err, update) => {
-        if (update && update.summary.changes) {
-            require("touch")("./tmp/restart.txt", null, ()=>{});
-            console.log("Touched restart.txt");
-            console.log("Done with pull");
-        }
-    });
-});
-
-
 
 /* Error handling */
 app.use(function(req, res) {

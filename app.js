@@ -111,12 +111,12 @@ app.post("/loadthreads", function(req, res) {
 app.post("/dologin", async function(req, res) {
     // Validate the login for the user and reroute them (from the homepage to the profile page)
 
-    // Get the username and password from the request
-    let uname = req.body.username;
+    // Get the email and password from the request
+    let email = req.body.email;
     let pword = req.body.password;
 
     // Search the database to find a user with this name
-    let result = await db.collection('Users').findOne({"username": uname});
+    let result = await db.collection('Users').findOne({"email": email});
 
     let failReason = "";
     let redirectURL = "";
@@ -157,7 +157,7 @@ app.post("/doregister", async function(req, res) {
     let uni = req.body.university;
     
     let result = await db.collection('Users').findOne({
-        "username": uname
+        "email": email
     });
 
     let failReason = "";

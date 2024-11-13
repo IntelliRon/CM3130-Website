@@ -86,7 +86,7 @@ app.get("/thread", function(req, res) {
 })
 
 app.get("/register", function(req, res) {
-    res.render("pages/dev");
+    res.render("pages/signup");
     // Registration page
 });
 

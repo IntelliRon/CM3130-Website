@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <%- include('../partials/head')%>
+    </head>
+
+    <body>
+        <%- include('../partials/header')%>
+
+        <img id="WaveBackground" src="images/WaveBackground.png">
+        <div id="SignupContent">
+            <div id="WelcomeDiv">
+                <div id="WelcomeTitleDiv">
+                    <h1 id="WelcomeText">Welcome to PlacementHub</h1>
+                    <img id="WelcomeLogo" src="images/Logo.PNG">
+                </div>
+
+                <div id="WelcomeDetailTextDiv">
+                    <h3>We need some information from you before you can begin your placement journey!</h3>
+                </div>
+            </div>
+    
+            <form action="/doregister" id="SignupForm">
+                <div id="SignupDetailsDiv">
+                    <div class="detailsFieldDiv">
+                        <input class="detailsField" type="text" placeholder="Forename..." name="forename">
+                    </div>
+
+                    <div class="detailsFieldDiv">
+                        <input class="detailsField" type="text" placeholder="Surname..." name="surname">
+                    </div>
+
+                    <div class="detailsFieldDiv">
+                        <input class="detailsField" type="password" placeholder="Create a password..." name="password">
+                    </div>
+                    
+                    <div class="detailsFieldDiv">
+                        <input class="detailsField" type="password" placeholder="Confirm password..." name="confirmPassword">
+                    </div>
+
+                    <div class="detailsFieldDiv">
+                        <input class="detailsField" type="text" placeholder="University..." name="university">
+                    </div>
+                    
+                    <div class="detailsFieldDiv">
+                        <input class="detailsField" type="email" placeholder="University Email..." name="universityEmail">
+                    </div>
+                </div>
+
+                <button id="CreateButton" type="submit">Create Account</button>
+            </form>
+        </div>
+
+        <%- include('../partials/footer')%>
+    </body>
+</html>

@@ -11,6 +11,9 @@ $(function(){
     })
 
     $("#SidebarProfileIcon").on("click", function(){
+        $.post("/profile", function(data){
+            console.log(data)
+        });
         $("#UserDiv").css("display", "flex")
         $("#NavSideBar").removeClass("opened")
         $("#NavSideBar").addClass("closed")

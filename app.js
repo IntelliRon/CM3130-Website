@@ -25,11 +25,11 @@ console.error = console.log;
 console.log("Server is initialising...");
 console.log("Running on server version " + VERSION);
 
-const SERVER_PORT = process.env.PORT | 8080; // Default port to 8080
-
 // Get all environment variables
 require('dotenv').config();
 const { MongoClient, ServerApiVersion } = require('mongodb'); // npm install mongodb
+
+const SERVER_PORT = process.env.PORT | 8080; // Default port to 8080
 
 if (!process.env.DATABASE_USERNAME || !process.env.DATABASE_PASSWORD) {
     console.log("Cannot retrieve database username or password. Please set the database username and password in the file '.env'");

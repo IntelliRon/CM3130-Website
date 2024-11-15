@@ -4,3 +4,6 @@
 debug.log
 .env
 sample-data-generator.js
+sample-data-users.log
+sample-data-locations.log
+sample-data-threads.log

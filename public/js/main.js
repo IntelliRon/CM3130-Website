@@ -13,6 +13,9 @@ $(function(){
     $("#SidebarProfileIcon").on("click", function(){
         $.post("/profile", function(data){
             console.log(data)
+            $("#UsersNameText").text(data.firstName + " " + data.lastName);
+            $("#UsersEmailText").text(data.email);
+            $("#UsersLocationText").text(data.location);
         });
         $("#UserDiv").css("display", "flex")
         $("#NavSideBar").removeClass("opened")

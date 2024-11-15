@@ -5,9 +5,7 @@
     "ejs": "^3.1.10",
     "express": "^4.21.1",
     "http": "^0.0.1-security",
-    "mongodb": "^6.10.0",
-    "simple-git": "^3.27.0",
-    "touch": "^3.1.1"
+    "mongodb": "^6.10.0"
   },
   "name": "client-website",
   "version": "1.0.0",

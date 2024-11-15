@@ -3,3 +3,4 @@
 /tmp
 debug.log
 .env
+sample-data-generator.js

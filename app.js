@@ -95,7 +95,7 @@ app.use(express.static('public'));
 
 app.get("/", function(req, res) {
     // Render the homepage
-    res.render("pages/index");
+    res.render("pages/index", {loggedin: req.session.loggedin});
 });
 
 app.get("/forum/placements", function(req, res) {
@@ -245,10 +245,9 @@ app.post("/profile", function(req, res) {
         // Find the user's associated placement location
         let locationName = "Not set";
 
-        if (result.hasOwnProperty("location")) {
-            if (result.location !== undefined && result.location !== null) {
-                let locationResult = db.collection('Locations').findOne({"_id": result.location}).then(locationResult => {
-
+        if (result.hasOwnProperty("placementLocationID")) {
+            if (result.placementLocationID !== undefined && result.placementLocationID !== null) {
+                let locationResult = db.collection('Locations').findOne({"_id": result.placementLocationID}).then(locationResult => {
                     if (locationResult) {
                         locationName = locationResult.name + " // " + locationResult.area;
                     } else {

@@ -27,6 +27,7 @@ button {
 
 button:active {
     background-color: #68849B;
+    border: 0;
 }
 
 #NavBar {

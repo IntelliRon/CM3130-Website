@@ -12,8 +12,10 @@ $(function(){
 
     $("#SidebarProfileIcon").on("click", function(){
         $.post("/profile", function(data){
-            console.log(data)
-            $("#UsersNameText").text(data.firstName + " " + data.lastName);
+            console.log(data);
+            let fullname = data.firstName.concat(" ", data.lastName);
+            console.log(fullname)
+            $("#UsersNameText").text(fullname);
             $("#UsersEmailText").text(data.email);
             $("#UsersLocationText").text(data.location);
         });

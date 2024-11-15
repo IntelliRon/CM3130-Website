@@ -14,6 +14,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    background: center;
+    background-repeat: no-repeat;
+    background-image: url(images/WaveBackground.png);
+    background-size: cover;
 }
 
 #WelcomeDiv {

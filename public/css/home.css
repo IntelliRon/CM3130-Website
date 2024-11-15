@@ -110,14 +110,11 @@
 
 #HomeLoginButton{
     width: 100px;
-    padding: 5px;
     margin: 0;
-    background-color: #7B9BB6;
-    border-width: 0px 5px 10px 5px;
-    border-radius: 24px;
-    border-color: #6C90AE;
-    border-style: solid;
-    color: #FFF;
+}
+
+#HomeLoginButton:active{
+    background: #68849B;
 }
 
 #HomeDoneateDiv{

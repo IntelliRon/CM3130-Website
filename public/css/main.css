@@ -15,6 +15,20 @@ a {
     color: #E2BE44;
 }
 
+button {
+    padding: 5px;
+    background-color: #7B9BB6;
+    border-width: 0px 5px 10px 5px;
+    border-radius: 24px;
+    border-color: #6C90AE;
+    border-style: solid;
+    color: #FFF;
+}
+
+button:active {
+    background-color: #68849B;
+}
+
 #NavBar {
     display: flex;
     background-color: var(--secondary-background);

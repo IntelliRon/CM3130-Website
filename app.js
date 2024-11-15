@@ -1,10 +1,10 @@
 /**
  * Placement Hub Server
- * v.0.0.1
+ * v.0.0.2
  * 
  * 01/11/2024 - 15/11/2024
  */
-const VERSION = "v0.0.1";
+const VERSION = "v0.0.2";
 
 
 var fs = require('fs');
@@ -25,11 +25,11 @@ console.error = console.log;
 console.log("Server is initialising...");
 console.log("Running on server version " + VERSION);
 
-const SERVER_PORT = process.env.PORT | 8080; // Default port to 8080
-
 // Get all environment variables
 require('dotenv').config();
-const { MongoClient, ServerApiVersion } = require('mongodb'); // npm install mongodb
+const { MongoClient, ServerApiVersion } = require('mongodb');
+
+const SERVER_PORT = process.env.PORT | 8080; // Default port to 8080
 
 if (!process.env.DATABASE_USERNAME || !process.env.DATABASE_PASSWORD) {
     console.log("Cannot retrieve database username or password. Please set the database username and password in the file '.env'");
@@ -45,14 +45,29 @@ const client = new MongoClient(url, {
         deprecationErrors: true,
     }
 });
-const dbname = "sample_mflix";
+const dbname = "PlacementHub";
 
-const express = require('express'); //npm install express
-const bcrypt = require('bcrypt'); // npm install bcrypt
+const express = require('express');
+const session = require('express-session');
+const bodyParser = require('body-parser');
+const bcrypt = require('bcrypt');
 
 var app = express();
 
-const http = require("http").Server(app); // npm install http
+const http = require("http").Server(app);
+
+const sessionMiddleware = session({
+    secret: "19e36b9d4a99ed91b79306ae3999e651ee7d6c3f0a189c2445c6544bbae8c6bf",
+    resave: true,
+    saveUninitialized: true,
+    maxAge: 2592000000
+});
+
+app.use(sessionMiddleware);
+
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
 
 app.set("view engine", "ejs");
 
@@ -117,46 +132,46 @@ app.post("/loadthreads", function(req, res) {
     // Sideload all the threads here (remember to use pagination. Don't load ALL posts at once)
 });
 
-app.post("/dologin", async function(req, res) {
-    // Validate the login for the user and reroute them (from the homepage to the profile page)
+app.post("/dologin", function(req, res) {
+    // Validate the login for the user and reroute them back to home
 
     // Get the email and password from the request
     let email = req.body.email;
     let pword = req.body.password;
 
     // Search the database to find a user with this name
-    let result = await db.collection('Users').findOne({"email": email});
+    db.collection('Users').findOne({"email": email}).then(result => {
+        let failReason = "";
+        let redirectURL = "";
 
-    let failReason = "";
-    let redirectURL = "";
-
-    if (!result) {
-        failReason += "username or password is incorrect";
-        encodeURI(failReason)
-        redirectURL += "/login?reason="+failReason;
-        res.redirect(redirectURL);
-        return;
-    }
-
-    // Check if the password is the same
-    bcrypt.compare(pword, result.password, function(err, checkPassword) {
-        if (checkPassword) { // Log the user in, if the password is correct
-            req.session.loggedin = true;
-            req.session.email = email;
-            req.session.userLevel = result.userLevel;
-            res.redirect('/profile');
-        } else { // The password is wrong
+        if (!result) {
             failReason += "username or password is incorrect";
-            encodeURI(failReason);
+            encodeURI(failReason)
             redirectURL += "/?reason="+failReason;
             res.redirect(redirectURL);
-
             return;
         }
+
+        // Check if the password is the same
+        bcrypt.compare(pword, result.password, function(err, checkPassword) {
+            if (checkPassword) { // Log the user in, if the password is correct
+                req.session.loggedin = true;
+                req.session.email = email;
+                req.session.userLevel = result.userLevel;
+                res.redirect('/');
+            } else { // The password is wrong
+                failReason += "username or password is incorrect";
+                encodeURI(failReason);
+                redirectURL += "/?reason="+failReason;
+                res.redirect(redirectURL);
+
+                return;
+            }
+        });
     });
 });
 
-app.post("/doregister", async function(req, res) {
+app.post("/doregister", function(req, res) {
     // Register the new user and log them in. Reroute them to the profile page
 
     let fname = req.body.first_name;
@@ -165,30 +180,28 @@ app.post("/doregister", async function(req, res) {
     let pword = req.body.password;
     let uni = req.body.university;
     
-    let result = await db.collection('Users').findOne({
+    let result = db.collection('Users').findOne({
         "email": email
-    });
+    }).then(result => {
+        let failReason = "";
+        let redirectURL = "";
 
-    let failReason = "";
-    let redirectURL = "";
+        if (result) { // The user already exists
+            failReason += "already exists";
+            encodeURI(failReason);
+            redirectURL += "/register?reason="+failReason;
+        } else {
+            // 9 rounds of salting should be enough
+            bcrypt.hash(pword, 9, function(err, hash) {
+                if (err) {
+                    console.log(err);
+                    res.status(500);
+                    res.send("500: Internal server error");
+                    return;
+                }
 
-    if (result) { // The user already exists
-        failReason += "already exists";
-        encodeURI(failReason);
-        redirectURL += "/register?reason="+failReason;
-    } else {
-        // 9 rounds of salting should be enough
-        bcrypt.hash(pword, 9, async function(err, hash) {
-            if (err) {
-                console.log(err);
-                res.status(500);
-                res.send("500: Internal server error");
-                return;
-            }
-
-            // Store the new user in the database
-            try {
-                let result = await db.collection('Users').insertOne({
+                // Store the new user in the database
+                let result = db.collection('Users').insertOne({
                     "firstName": fname,
                     "lastName": lname,
                     "email": email,
@@ -196,62 +209,78 @@ app.post("/doregister", async function(req, res) {
                     "university": uni,
                     "placementLocationID": null,
                     "userLevel": 1 // Moderation
-                });
-            } catch (err) {
-                console.log(err);
-                res.status(500);
-                res.send("500: Internal server error");
-                return;
-            }
+                }).then((err, result) => {
+                    if (err) {
+                        console.log(err);
+                        res.status(500);
+                        res.send("500: Internal server error");
+                        return;
+                    }
 
-            // Log the new user in
-            req.session.loggedin = true;
-            req.session.email = email;
-            req.session.userLevel = 1;
-            res.redirect("/profile");
-        });
-    }
+                    // Log the new user in
+                    req.session.loggedin = true;
+                    req.session.email = email;
+                    req.session.userLevel = 1;
+                    res.redirect("/");
+                });
+            });
+        }
+    });
 });
 
-app.post("/profile", async function(req, res) {
+app.post("/profile", function(req, res) {
     // Get the user profile information
-    res.send("Hmm. You shouldn't be here! This page is still under development");
-
     if (!req.session.loggedin) {
         res.send({"Error": 404, "Description": "The user is not logged in, therefore profile information cannot be retrieved"});
         return;
     }
 
     // Find the user
-    let result = await db.collection('Users').findOne({"email": req.session.email});
-
-    if (!result) {
-        res.send({Error: 404, Description: "The user does not exist anymore, therefore profile information cannot be retrieved"});
-        return;
-    }
-
-    // Find the user's associated placement location
-    let locationName = "Not set";
-
-    if (result.hasOwnProperty("location")) {
-        if (result.location !== undefined && result.location !== null) {
-            let locationResult = await db.collection('Locations').findOne({"_id": result.location});
-
-            if (locationResult) {
-                locationName = locationResult.name + " // " + locationResult.area;
-            } else {
-                // If there is no result from the database, then the user set a location at some point that is not valid anymore
-                locationName = "Invalid location. Please change"
-            }
+    let result = db.collection('Users').findOne({"email": req.session.email}).then(result => {
+        if (!result) {
+            res.send({Error: 404, Description: "The user does not exist anymore, therefore profile information cannot be retrieved"});
+            return;
         }
-    }
-    
-    // Send the processed user information to the user
-    res.send({
-        firstName: result.firstName, 
-        lastName: result.lastName, 
-        email: result.email,
-        location: locationName
+
+        // Find the user's associated placement location
+        let locationName = "Not set";
+
+        if (result.hasOwnProperty("location")) {
+            if (result.location !== undefined && result.location !== null) {
+                let locationResult = db.collection('Locations').findOne({"_id": result.location}).then(locationResult => {
+
+                    if (locationResult) {
+                        locationName = locationResult.name + " // " + locationResult.area;
+                    } else {
+                        // If there is no result from the database, then the user set a location at some point that is not valid anymore
+                        locationName = "Invalid location. Please change"
+                    }
+
+                    // Send the processed user information to the user
+                    res.send({
+                        firstName: result.firstName, 
+                        lastName: result.lastName, 
+                        email: result.email,
+                        location: locationName
+                    });
+                });
+            } else {
+                res.send({
+                    firstName: result.firstName, 
+                    lastName: result.lastName, 
+                    email: result.email,
+                    location: locationName
+                });
+            }
+        } else {
+            // Send the processed user information to the user
+            res.send({
+                firstName: result.firstName, 
+                lastName: result.lastName, 
+                email: result.email,
+                location: locationName
+            });
+        }
     });
 });
 

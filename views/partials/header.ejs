@@ -20,12 +20,16 @@
         <h1 id="SidePanelButton" class="NavPanelButton">☰</h1>
         <p id="SidebarCloseText">Close</p>
     </div>
-    <div id="SideBarOptions">
-        <img id="SidebarProfileIcon" src="images/ProfileIcon.PNG">
-        <a href="#">
-            <img id="SidebarSettingIcon" src="images/SettingIcon.PNG">
-        </a>
-    </div>
+    <%
+    console.log(loggedin);
+    if(loggedin) {%>
+        <div id="SideBarOptions">
+            <img id="SidebarProfileIcon" src="images/ProfileIcon.PNG">
+            <a href="#">
+                <img id="SidebarSettingIcon" src="images/SettingIcon.PNG">
+            </a>
+        </div>
+    <% } %>
     <a href="/">
         <div class="sideBarButton" id="HomeNavButton">
             <p>Home</p>

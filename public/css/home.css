@@ -61,7 +61,7 @@
 #HomeLoginDetailDiv {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-around;
     background-color: var(--tertiary-background);
     flex-basis: 100%;
     border-radius: 37px;

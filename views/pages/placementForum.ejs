@@ -16,20 +16,36 @@
         <div id="ForumContainer">
             <div id="ForumLeftColumn">
                 <div id="LocationContainer">
-
+                    <% locations.forEach((location) => { %>
+                        <div class="locationDiv">
+                            <p><%= location %></p>
+                            <img class="locationArrow down" src="/images/Arrow.png">
+                        </div>
+                    <% }); %>
                 </div>
                 <div id="MapContainer">
-
+                    <img src="/images/Map.png"
                 </div>
             </div>
 
             <div id="ForumMiddleColumn">
+                <div>
 
+                </div>
+                <div>
+                    <div>
+
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
             </div>
 
             <div id="ForumRightColumn">
                 <div id="BulletinHeadingDiv">
-                    
+                    <h2>Bulletin Board Autumn 2024</h2>
+                    <p>last updated for Aberdeen 9:40AM 18/10/24</p>
                 </div>
                 <div id="BulletinContentDiv">
                     

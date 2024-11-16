@@ -44,3 +44,19 @@
     background: purple;
     flex-basis: 85%;
 }
+
+.locationDiv{
+    
+}
+
+.locationArrow{
+
+}
+
+.down{
+    transform: scaleY(1);
+}
+
+.up{
+    transform: scaleY(-1);
+}

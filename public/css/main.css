@@ -152,7 +152,7 @@ footer {
     display: none;
     background: rgba(100, 100, 100, 0.85);
     justify-content: center;
-    padding: 60px 0px;
+    padding: 75px 0px;
     z-index: 3;
     top: 0;
     bottom: 0;
@@ -176,12 +176,25 @@ footer {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: #9BB2E4;
-    width: 40%;
-    padding: 25px;
+    background: var(--main-background);
+    width: 35%;
     border-radius: 15px;
     justify-content: space-around;
     z-index: 5;
+}
+
+#UserButtonsDiv{
+    display: flex;
+    align-self: flex-start;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    padding: 0px 25px;
+}
+
+#UserExitButton {
+    width: 40px;
+    height: 40px;
 }
 
 #UserProfileImage{
@@ -197,21 +210,17 @@ footer {
     align-items: center;
     display: flex;
     flex-direction: column;
+    padding: 10px;
     width: 100%;
-    background: rgba(217, 217, 217, 0.3);
-    border-radius: 15px;
+    background: #37648A;
+    border-radius: 25px;
+    border-width: 15px 0px 0px 0px;
+    border-style: solid;
+    border-color: #3B6C95;
 }
 
 .userProfileDetailDiv{
     align-items: center;
     display: flex;
     flex-direction: column;
-}
-
-.userProfileDetailHeading{
-    color: var(--main-background);
-}
-
-.userProfileDetailText{
-    color: var(--tertiary-background);
 }

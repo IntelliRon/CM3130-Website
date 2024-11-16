@@ -7,11 +7,7 @@ $(function(){
 
         $(this).addClass("up");
         $(this).removeClass("down");
-        let sublocations = $(this).parent().parent().children(".sublocationDiv");
-        console.log(sublocations);
-        for(let sublocation in sublocations){
-            sublocation.removeClass("hidden");
-            sublocation.addClass("shown");
-        }
+        $(this).parent().parent().children(".sublocationDiv").removeClass("hidden");
+        $(this).parent().parent().children(".sublocationDiv").addClass("shown");
     })
 })

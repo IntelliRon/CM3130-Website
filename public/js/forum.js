@@ -10,8 +10,8 @@ $(function(){
         let sublocations = $(this).parent().parent().children(".sublocationDiv");
         console.log(sublocations);
         for(let sublocation in sublocations){
-            $(sublocation).removeClass("hidden");
-            $(sublocation).addClass("shown");
+            sublocation.removeClass("hidden");
+            sublocation.addClass("shown");
         }
     })
 })

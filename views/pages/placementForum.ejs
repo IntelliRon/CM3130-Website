@@ -20,7 +20,12 @@
                         <div class="locationDiv">
                             <p class="locationText">Placement Hubs for <%= location %></p>
                             <img class="locationArrow down" src="/images/Arrow.png">
-                            <p class="locationText">test <%= locations[location][0] %></p>
+                            
+                            <% for (const sublocation in location) {%>
+                                <div>
+                                    <p class="locationText">Sub Location <%= sublocation %></p>
+                                </div>
+                            <% }; %>
                         </div>
                     <% }; %>
                 </div>

@@ -1,10 +1,12 @@
 /**
  * Placement Hub Server
- * v.0.0.2
+ * v.0.0.3
  * 
  * 01/11/2024 - 15/11/2024
  */
-const VERSION = "v0.0.2";
+const VERSION = "v0.0.3";
+
+const CACHE_REFRESH_RATE = 60000; // in milliseconds
 
 
 var fs = require('fs');
@@ -71,6 +73,10 @@ app.use(bodyParser.urlencoded({
 
 app.set("view engine", "ejs");
 
+// Placement location caching
+var pLocUpdateTime = 0;
+var placementLocations = {} // {areaName: {locationName: locationID}}
+
 var db;
 
 connectDB();
@@ -98,8 +104,44 @@ app.get("/", function(req, res) {
     res.render("pages/index", {loggedin: req.session.loggedin});
 });
 
+
 app.get("/forum/placements", function(req, res) {
-    res.render("pages/dev");
+    // If the cache is outdated, get a new version from the database
+    // (to ensure that new locations are actually added)
+    if (Date.now() - pLocUpdateTime > CACHE_REFRESH_RATE) {
+        pLocUpdateTime = Date.now();
+        let cursor = db.collection('Locations').find({})
+            if (db.collection('Locations').estimatedDocumentCount({})) placementLocations = {"Error" : "No locations found"};
+
+            cursor.forEach(element => {
+                if (placementLocations.hasOwnProperty(element.area)) {
+                    let tempName = {};
+                    tempName[element.name] = element._id;
+                    placementLocations[element.area].append(tempName);
+                } else {
+                    let tempName = {};
+                    tempName[element.name] = element._id;
+                    placementLocations[element.area] = tempName;
+                }
+            });
+
+            // {areaName: {locationName: locationID}}
+            res.render("pages/placementForum", {
+                loggedin: req.session.loggedin,
+                locations: placementLocations, // All locations
+                // Preselect the user's location by their home location
+                preferredLocation: (req.session.loggedin) ? req.session.placementLocationID : null
+            });
+        
+    } else {
+        res.render("pages/placementForum", {
+            loggedin: req.session.loggedin,
+            locations: placementLocations, // All locations
+            // Preselect the user's location by their home location
+            preferredLocation: (req.session.loggedin) ? req.session.placementLocationID : null
+        });
+    }
+
     // Render the main forum page here
 });
 
@@ -158,6 +200,7 @@ app.post("/dologin", function(req, res) {
                 req.session.loggedin = true;
                 req.session.email = email;
                 req.session.userLevel = result.userLevel;
+                req.session.placementLocationID = result.placementLocationID;
                 res.redirect('/');
             } else { // The password is wrong
                 failReason += "username or password is incorrect";
@@ -180,7 +223,7 @@ app.post("/doregister", function(req, res) {
     let pword = req.body.password;
     let uni = req.body.university;
     
-    let result = db.collection('Users').findOne({
+    db.collection('Users').findOne({
         "email": email
     }).then(result => {
         let failReason = "";
@@ -221,6 +264,7 @@ app.post("/doregister", function(req, res) {
                     req.session.loggedin = true;
                     req.session.email = email;
                     req.session.userLevel = 1;
+                    req.session.placementLocationID = null;
                     res.redirect("/");
                 });
             });
@@ -236,7 +280,7 @@ app.post("/profile", function(req, res) {
     }
 
     // Find the user
-    let result = db.collection('Users').findOne({"email": req.session.email}).then(result => {
+    db.collection('Users').findOne({"email": req.session.email}).then(result => {
         if (!result) {
             res.send({Error: 404, Description: "The user does not exist anymore, therefore profile information cannot be retrieved"});
             return;
@@ -247,7 +291,7 @@ app.post("/profile", function(req, res) {
 
         if (result.hasOwnProperty("placementLocationID")) {
             if (result.placementLocationID !== undefined && result.placementLocationID !== null) {
-                let locationResult = db.collection('Locations').findOne({"_id": result.placementLocationID}).then(locationResult => {
+                db.collection('Locations').findOne({"_id": result.placementLocationID}).then(locationResult => {
                     if (locationResult) {
                         locationName = locationResult.name + " // " + locationResult.area;
                     } else {

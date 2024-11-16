@@ -16,12 +16,12 @@
         <div id="ForumContainer">
             <div id="ForumLeftColumn">
                 <div id="LocationContainer">
-                    <% for (let i = 0; i < locations.length; i++) {%>
+                    <% locations.map((location) {%>
                         <div class="locationDiv">
-                            <p><%= locations[i] %></p>
+                            <p><%= locations.area %></p>
                             <img class="locationArrow down" src="/images/Arrow.png">
                         </div>
-                    <% }; %>
+                    <% }); %>
                 </div>
                 <div id="MapContainer">
                     <img src="/images/Map.png">

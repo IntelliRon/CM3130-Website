@@ -21,7 +21,7 @@
                             <p class="locationText">Placement Hubs for <%= location %></p>
                             <img class="locationArrow down" src="/images/Arrow.png">
                             
-                            <% for (const sublocation in location) {%>
+                            <% for (const sublocation in locations[location]) {%>
                                 <div>
                                     <p class="locationText">Sub Location <%= sublocation %></p>
                                 </div>

@@ -20,12 +20,12 @@
                         <div class="locationDiv">
                             <p class="locationText">Placement Hubs for <%= location %></p>
                             <img class="locationArrow down" src="/images/Arrow.png">
-                            <p class="locationText">test <%= locations[location] %></p>
+                            <p class="locationText">test <%= locations[location][0] %></p>
                         </div>
                     <% }; %>
                 </div>
                 <div id="MapContainer">
-                    <img src="/images/Map.PNG">
+                    <img id="ForumMap" src="/images/Map.PNG">
                 </div>
             </div>
 

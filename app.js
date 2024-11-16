@@ -11,7 +11,7 @@ const CACHE_REFRESH_RATE = 60000; // in milliseconds
 
 var fs = require('fs');
 var util = require('util');
-var log_file = fs.createWriteStream(__dirname + 'logs/debug-' + new Date().toISOString() + '.log', {flags : 'w'});
+var log_file = fs.createWriteStream(__dirname + 'logs/debug.log', {flags : 'w'});
 var log_stdout = process.stdout;
 
 // Override the console.log method to write to a debug file instead

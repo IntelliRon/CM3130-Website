@@ -3,6 +3,8 @@
     <head>
         <%- include('../partials/head')%>
         <link rel="stylesheet" href="/css/forum.css">
+
+        <script src="/js/forum.js"></script>
     </head>
 
     <body>
@@ -16,8 +18,8 @@
         <div id="ForumContainer">
             <div id="ForumLeftColumn">
                 <div id="LocationContainer">
-                    <div class="generalLocationDiv">
-                        <% for (const location in locations) {%>
+                    <% for (const location in locations) {%>
+                        <div class="generalLocationDiv">
                             <div class="locationDiv">
                                 <p class="locationText">Placement Hubs for <%= location %></p>
                                 <img class="locationArrow down" src="/images/Arrow.png">
@@ -27,8 +29,8 @@
                                     <p class="locationText">Sub Location <%= sublocation %></p>
                                 </div>
                             <% }; %>
-                        <% }; %>
-                    </div>
+                        </div>
+                    <% }; %>
                 </div>
                 <div id="MapContainer">
                     <img id="ForumMap" src="/images/Map.PNG">

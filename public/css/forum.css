@@ -65,6 +65,7 @@
 
 .locationArrow{
     height: 50px;
+    cursor: pointer;
 }
 
 .down{
@@ -80,6 +81,7 @@
     align-items: center;
     padding: 10px;
     background: #C8D2EA;
+    cursor: pointer;
 }
 
 .shown{

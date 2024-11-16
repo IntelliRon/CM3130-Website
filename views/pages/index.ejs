@@ -3,12 +3,12 @@
     <head>
         <%- include('../partials/head')%>
 
-        <link rel="stylesheet" href="js/vendor/owlcarousel/dist/assets/owl.carousel.min.css">
-        <link rel="stylesheet" href="js/vendor/owlcarousel/dist/assets/owl.theme.default.min.css">
-        <script src="js/vendor/owlcarousel/dist/owl.carousel.min.js"></script>
-        <script src="js/home.js"></script>
+        <link rel="stylesheet" href="/public/js/vendor/owlcarousel/dist/assets/owl.carousel.min.css">
+        <link rel="stylesheet" href="/public/js/vendor/owlcarousel/dist/assets/owl.theme.default.min.css">
+        <script src="/public/js/vendor/owlcarousel/dist/owl.carousel.min.js"></script>
+        <script src="/public/js/home.js"></script>
         
-        <link rel="stylesheet" href="css/home.css">
+        <link rel="stylesheet" href="/public/css/home.css">
     </head>
 
     <body>
@@ -23,37 +23,37 @@
         <!--CAROUSEL-->
         <div class="owl-carousel">
             <div class="carouselContainer">
-                <img class="carouselImage" src="images/pexels-keira-burton-6147276.jpg">
+                <img class="carouselImage" src="/public/images/pexels-keira-burton-6147276.jpg">
                 <div class="carouselTextDiv">
                     <p class="carouselText">Lorem ipsum dolor sit amet, consectetur adipiscing elit.<br>Donec et lacinia nunc, in faucibus leo.<br>Fusce ut nulla elementum metus tincidunt tincidunt quis sit amet magna.<br>Pellentesque quis venenatis massa, ac aliquam nulla.</p>
                 </div>
             </div>
             <div class="carouselContainer">
-                <img class="carouselImage" src="images/pexels-olly-3762800.jpg">
+                <img class="carouselImage" src="/public/images/pexels-olly-3762800.jpg">
                 <div class="carouselTextDiv">
                     <p class="carouselText">Lorem ipsum dolor sit amet, consectetur adipiscing elit.<br>Donec et lacinia nunc, in faucibus leo.<br>Fusce ut nulla elementum metus tincidunt tincidunt quis sit amet magna.<br>Pellentesque quis venenatis massa, ac aliquam nulla.</p>
                 </div>
             </div>
             <div class="carouselContainer">
-                <img class="carouselImage" src="images/pexels-pixabay-256455.jpg">
+                <img class="carouselImage" src="/public/images/pexels-pixabay-256455.jpg">
                 <div class="carouselTextDiv">
                     <p class="carouselText">Lorem ipsum dolor sit amet, consectetur adipiscing elit.<br>Donec et lacinia nunc, in faucibus leo.<br>Fusce ut nulla elementum metus tincidunt tincidunt quis sit amet magna.<br>Pellentesque quis venenatis massa, ac aliquam nulla.</p>
                 </div>
             </div>
             <div class="carouselContainer">
-                <img class="carouselImage" src="images/pexels-edward-jenner-4031694.jpg">
+                <img class="carouselImage" src="/public/images/pexels-edward-jenner-4031694.jpg">
                 <div class="carouselTextDiv">
                     <p class="carouselText">Lorem ipsum dolor sit amet, consectetur adipiscing elit.<br>Donec et lacinia nunc, in faucibus leo.<br>Fusce ut nulla elementum metus tincidunt tincidunt quis sit amet magna.<br>Pellentesque quis venenatis massa, ac aliquam nulla.</p>
                 </div>
             </div>
             <div class="carouselContainer">
-                <img class="carouselImage" src="images/pexels-buro-millennial-636760-1438072.jpg">
+                <img class="carouselImage" src="/public/images/pexels-buro-millennial-636760-1438072.jpg">
                 <div class="carouselTextDiv">
                     <p class="carouselText">Lorem ipsum dolor sit amet, consectetur adipiscing elit.<br>Donec et lacinia nunc, in faucibus leo.<br>Fusce ut nulla elementum metus tincidunt tincidunt quis sit amet magna.<br>Pellentesque quis venenatis massa, ac aliquam nulla.</p>
                 </div>
             </div>
             <div class="carouselContainer">
-                <img class="carouselImage" src="images/pexels-buro-millennial-636760-1438081.jpg">
+                <img class="carouselImage" src="/public/images/pexels-buro-millennial-636760-1438081.jpg">
                 <div class="carouselTextDiv">
                     <p class="carouselText">Lorem ipsum dolor sit amet, consectetur adipiscing elit.<br>Donec et lacinia nunc, in faucibus leo.<br>Fusce ut nulla elementum metus tincidunt tincidunt quis sit amet magna.<br>Pellentesque quis venenatis massa, ac aliquam nulla.</p>
                 </div>
@@ -65,7 +65,7 @@
                 <%
                 if(!loggedin) {%>
                     <div id="HomeLoginSectionDiv">
-                        <img id="HomeMiniLoginIcon" src="images/MiniProfileIcon.PNG">
+                        <img id="HomeMiniLoginIcon" src="/public/images/MiniProfileIcon.PNG">
                         <form id="HomeLoginForm" action="/dologin" method="post">
                             <input id="HomeEmailField" class="homeLoginField" type="text" placeholder="Email" name="email">
                             <input class="homeLoginField" type="password" placeholder="Password" name="password">
@@ -81,30 +81,30 @@
                 <% } %>
 
                 <div id="HomeDoneateDiv">
-                    <img class="homeDonateBubble" src="images/ProfileBubble1.png">
+                    <img class="homeDonateBubble" src="/public/images/ProfileBubble1.png">
                     <div id="HomeDoneateCenterDiv">
-                        <img id="DonateLogo" src="images/Logo.PNG">
+                        <img id="DonateLogo" src="/public/images/Logo.PNG">
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi at pulvinar risus, vel rhoncus ligula.<br>Duis vel consequat diam.<br>Proin nisi nisi, sagittis ac nulla vel, rhoncus sollicitudin turpis.</p>
                         <p><a href="#">Click Here</a> for content.</p>
                     </div>
-                    <img class="homeDonateBubble" src="images/ProfileBubble2.png">
+                    <img class="homeDonateBubble" src="/public/images/ProfileBubble2.png">
                 </div>
             </div>
         </div>
 
         <div id="HomeBuildingDiv">
-            <img id="HomeBuildingImage" src="images/pexels-lina-5624130.jpg">
+            <img id="HomeBuildingImage" src="/public/images/pexels-lina-5624130.jpg">
         </div>
 
         <div id="HomeStoryDiv">
             <div id="HomeStoryTextDiv">
-                <img id="HomeStoryMiniLogo" src="images/Logo.PNG">
+                <img id="HomeStoryMiniLogo" src="/public/images/Logo.PNG">
                 <p class="homeStoryText">Join billions of students finding their temporary<br>homes for university accommodation right now.</p>
                 <p class="homeStoryText">We have helped a quadrillion students on their<br>own journeys so far, and hope to help a google more</p>
                 <p class="homeStoryText"><a id="HomeStoryLink" href="#">Click Here</a> to learn more about individuals stories.</p>
             </div>
             <div id="HomeStoryOverlapImageDiv">
-                <img id="HomeStoryStudentsImage" src="images/OverlapingHomeImage.png">
+                <img id="HomeStoryStudentsImage" src="/public/images/OverlapingHomeImage.png">
             </div>
         </div>
     </body>

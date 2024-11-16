@@ -111,7 +111,7 @@ app.get("/forum/placements", function(req, res) {
     if (Date.now() - pLocUpdateTime > CACHE_REFRESH_RATE) {
         pLocUpdateTime = Date.now();
         let cursor = db.collection('Locations').find({})
-            if (db.collection('Locations').estimatedDocumentCount({})) placementLocations = {"Error" : "No locations found"};
+            if (db.collection('Locations').estimatedDocumentCount({}) === 0) placementLocations = {"Error" : "No locations found"};
 
             cursor.forEach(element => {
                 if (placementLocations.hasOwnProperty(element.area)) {
@@ -123,14 +123,14 @@ app.get("/forum/placements", function(req, res) {
                     tempName[element.name] = element._id;
                     placementLocations[element.area] = tempName;
                 }
-            });
-
-            // {areaName: {locationName: locationID}}
-            res.render("pages/placementForum", {
-                loggedin: req.session.loggedin,
-                locations: placementLocations, // All locations
-                // Preselect the user's location by their home location
-                preferredLocation: (req.session.loggedin) ? req.session.placementLocationID : null
+            }).then(() => {
+                // {areaName: {locationName: locationID}}
+                res.render("pages/placementForum", {
+                    loggedin: req.session.loggedin,
+                    locations: placementLocations, // All locations
+                    // Preselect the user's location by their home location
+                    preferredLocation: (req.session.loggedin) ? req.session.placementLocationID : null
+                });
             });
         
     } else {

@@ -9,7 +9,7 @@
 #ForumLeftColumn{
     display: flex;
     flex-direction: column;
-    flex-grow: 1;
+    flex-basis: 25%;
     gap: 5px;
 }
 
@@ -68,4 +68,10 @@
 
 .up{
     transform: scaleY(-1);
+}
+
+#ForumMap {
+    width: 100%;
+    object-fit: cover;
+    height: 100%;
 }

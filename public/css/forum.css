@@ -1,0 +1,46 @@
+#ForumContainer{
+    height: 900px;
+    display: flex;
+    flex-direction: row;
+    background: #90A5D2;
+    gap: 5px;
+}
+
+#ForumLeftColumn{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    gap: 5px;
+}
+
+#LocationContainer{
+    background: red;
+    flex-basis: 55%;
+}
+
+#MapContainer{
+    background: green;
+    flex-grow: 1;
+}
+
+#ForumMiddleColumn{
+    flex-basis: 50%;
+    background: blue;
+}
+
+#ForumRightColumn{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; 
+    gap: 5px;
+}
+
+#BulletinHeadingDiv{
+    background: yellow;
+    flex-grow: 1;
+}
+
+#BulletinContentDiv{
+    background: purple;
+    flex-basis: 85%;
+}

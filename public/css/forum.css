@@ -16,6 +16,7 @@
 #LocationContainer{
     background: red;
     flex-basis: 55%;
+    overflow: auto;
 }
 
 #MapContainer{
@@ -46,11 +47,19 @@
 }
 
 .locationDiv{
-    
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    background: #9BB2E4;
+}
+
+.locationText{
+    margin: 0;
 }
 
 .locationArrow{
-
+    height: 50px;
 }
 
 .down{

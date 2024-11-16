@@ -26,4 +26,8 @@ $(function(){
     $("#UserDivBackgroundDiv").on("click", function(){
         $("#UserDiv").css("display", "none")
     })
+
+    $("#UserExitButton").on("click", function(){
+        $("#UserDiv").css("display", "none")
+    })
 })

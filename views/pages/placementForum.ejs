@@ -16,12 +16,12 @@
         <div id="ForumContainer">
             <div id="ForumLeftColumn">
                 <div id="LocationContainer">
-                    <% locations.forEach((location) => { %>
+                    <% for (let i = 0; i < locations.length; i++) {%>
                         <div class="locationDiv">
-                            <p><%= location %></p>
+                            <p><%= locations[i] %></p>
                             <img class="locationArrow down" src="/images/Arrow.png">
                         </div>
-                    <% }); %>
+                    <% }; %>
                 </div>
                 <div id="MapContainer">
                     <img src="/images/Map.png">

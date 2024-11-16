@@ -46,6 +46,11 @@
     flex-basis: 85%;
 }
 
+.generalLocationDiv{
+    display: flex;
+    flex-direction: column;
+}
+
 .locationDiv{
     display: flex;
     align-items: center;
@@ -68,6 +73,21 @@
 
 .up{
     transform: scaleY(-1);
+}
+
+.sublocationDiv{
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background: #C8D2EA;
+}
+
+.shown{
+    display: flex;
+}
+
+.hidden{
+    display: none;
 }
 
 #ForumMap {

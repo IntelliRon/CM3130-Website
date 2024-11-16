@@ -16,18 +16,19 @@
         <div id="ForumContainer">
             <div id="ForumLeftColumn">
                 <div id="LocationContainer">
-                    <% for (const location in locations) {%>
-                        <div class="locationDiv">
-                            <p class="locationText">Placement Hubs for <%= location %></p>
-                            <img class="locationArrow down" src="/images/Arrow.png">
-                            
+                    <div class="generalLocationDiv">
+                        <% for (const location in locations) {%>
+                            <div class="locationDiv">
+                                <p class="locationText">Placement Hubs for <%= location %></p>
+                                <img class="locationArrow down" src="/images/Arrow.png">
+                            </div>
                             <% for (const sublocation in locations[location]) {%>
-                                <div>
+                                <div class="sublocationDiv">
                                     <p class="locationText">Sub Location <%= sublocation %></p>
                                 </div>
                             <% }; %>
-                        </div>
-                    <% }; %>
+                        <% }; %>
+                    </div>
                 </div>
                 <div id="MapContainer">
                     <img id="ForumMap" src="/images/Map.PNG">

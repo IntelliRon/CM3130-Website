@@ -14,19 +14,19 @@
 }
 
 #LocationContainer{
-    background: red;
     flex-basis: 55%;
     overflow: auto;
 }
 
 #MapContainer{
-    background: green;
     flex-grow: 1;
 }
 
 #ForumMiddleColumn{
     flex-basis: 50%;
-    background: blue;
+    background: #FFF;
+    display: flex;
+    flex-direction: column;
 }
 
 #ForumRightColumn{
@@ -37,12 +37,12 @@
 }
 
 #BulletinHeadingDiv{
-    background: yellow;
+    background: #FFF;
     flex-grow: 1;
 }
 
 #BulletinContentDiv{
-    background: purple;
+    background: #9BB2E4;
     flex-basis: 85%;
 }
 
@@ -96,4 +96,10 @@
     width: 100%;
     object-fit: cover;
     height: 100%;
+}
+
+#PostDisplayHeading{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }

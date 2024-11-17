@@ -4,10 +4,15 @@ $(function(){
         $(".shown").removeClass("shown");
         $(".up").addClass("down");
         $(".up").removeClass("up");
-
-        $(this).addClass("up");
-        $(this).removeClass("down");
-        $(this).parent().parent().children(".sublocationDiv").removeClass("hidden");
-        $(this).parent().parent().children(".sublocationDiv").addClass("shown");
+        
+        if($(this).hasClass("down")){
+            $(this).addClass("up");
+            $(this).removeClass("down");
+            $(this).parent().parent().children(".sublocationDiv").removeClass("hidden");
+            $(this).parent().parent().children(".sublocationDiv").addClass("shown");
+        } else {
+            $(this).addClass("down");
+            $(this).removeClass("up");
+        }
     })
 })

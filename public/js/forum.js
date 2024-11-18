@@ -1,18 +1,19 @@
 $(function(){
     $(".locationArrow").on("click", function(){
-        $(".shown").addClass("hidden");
-        $(".shown").removeClass("shown");
-        $(".up").addClass("down");
-        $(".up").removeClass("up");
-        
         if($(this).hasClass("down")){
+            $(".shown").addClass("hidden");
+            $(".shown").removeClass("shown");
+            $(".up").addClass("down");
+            $(".up").removeClass("up");
             $(this).addClass("up");
             $(this).removeClass("down");
             $(this).parent().parent().children(".sublocationDiv").removeClass("hidden");
             $(this).parent().parent().children(".sublocationDiv").addClass("shown");
         } else {
-            $(this).addClass("down");
-            $(this).removeClass("up");
+            $(".shown").addClass("hidden");
+            $(".shown").removeClass("shown");
+            $(".up").addClass("down");
+            $(".up").removeClass("up");
         }
     })
 

@@ -39,6 +39,11 @@
 #BulletinHeadingDiv{
     background: #FFF;
     flex-grow: 1;
+    color: #000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
 }
 
 #BulletinContentDiv{
@@ -102,4 +107,175 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    color: #000;
+}
+
+#PostHeadingGap{
+    width: 80%;
+    height: 3px;
+    margin-bottom: 15px;
+    background: var(--main-background);
+}
+
+#AddPostButton{
+    width: 40px;
+    height: 40px;
+    font-size: larger;
+    padding: 0;
+}
+
+#PostPopupDiv{
+    position: fixed;
+    display: none;
+    background: rgba(100, 100, 100, 0.85);
+    justify-content: center;
+    align-items: center;
+    padding: 75px 0px;
+    z-index: 3;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+#CreatePostBackground{
+    top: 0;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: -1;
+    cursor: pointer;
+}
+
+#CreatePostPopupDiv{
+    display: none;
+    background: #85A7D8;
+    border-radius: 25px;
+    width: 60%;
+    height: 45%;
+}
+
+#CreatePostForum{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 25px;
+    height: 100%;
+}
+
+#CreatePostHeadingDiv{
+    display: flex;
+    gap: 25px;
+    align-items: center;
+}
+
+#CreatePostInputDiv{
+    display: flex;
+    background: #D5DCE8;
+    flex-grow: 1;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-radius: 25px;
+}
+
+#CreatePostInput{
+    background: none;
+    border: none;
+    outline: none;
+    width: 90%;
+}
+
+#CreatePostTooltip{
+    margin: 0;
+    background: #ABB6CE;
+    border-radius: 100%;
+    width: 24px;
+    height: 24px;
+    text-align: center;
+    color: #4B4A4A;
+}
+
+#CreatePostExitButton{
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    margin: 0;
+    background: #E5A1A1;
+    border-width: 0px 1px 4px 1px;
+    border-radius: 24px;
+    border-color: #ED8282;
+    border-style: solid;
+    color: #FFF;
+    text-align: center;
+    align-content: center;
+}
+
+#CreatePostBodyDiv{
+    display: flex;
+    gap: 10px;
+    background: #D5DCE8;
+    border-radius: 25px;
+    padding: 15px;
+    flex-grow: 1;
+}
+
+#CreatePostLogo{
+    width: 128px;
+}
+
+#PostButton{
+    background: #CDD4E6;
+    border-color: #9BB2E4;
+    color: #9397A4;
+    border-width: 0px 3px 7px 3px;
+}
+
+#CreatePostBodyTextarea{
+    flex-grow: 1;
+    border: 0;
+    background: none;
+    outline: none;
+    resize: none;
+}
+
+#CreatePostBodySideDiv{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+#DeletePostPopupDiv{
+    display: none;
+    flex-direction: column;
+    background: #A7B9E2;
+    border-radius: 40px;
+    width: 30%;
+    padding: 25px;
+    align-items: center;
+    gap: 15px;
+    border-width: 25px 5px 0px 5px;
+    border-color: #8AABC7;
+    border-style: solid;
+    color: #615D5D;
+    text-align: center;
+}
+
+#DeleteWarningIcon{
+    width: 25%;
+}
+
+#DeleteButtonsDiv{
+    display: flex;
+    width: 80%;
+    justify-content: space-evenly;
+}
+
+#DeleteButtonsDiv button{
+    width: 25%;
+    background-color: #CEE3F5;
+    border-width: 0px 2px 6px 2px;
+    border-color: #8AABC7;
+    color: #615D5D;
 }

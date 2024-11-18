@@ -15,4 +15,22 @@ $(function(){
             $(this).removeClass("up");
         }
     })
+
+    $("#AddPostButton").on("click", function(){
+        $("#PostPopupDiv").css("display", "flex")
+        $("#CreatePostPopupDiv").css("display", "block")
+        $("#DeletePostPopupDiv").css("display", "none")
+    })
+
+    $("#CreatePostBackground").on("click", function(){
+        $("#PostPopupDiv").css("display", "none")
+        $("#CreatePostPopupDiv").css("display", "none")
+        $("#DeletePostPopupDiv").css("display", "none")
+    })
+
+    $("#CreatePostExitButton").on("click", function(){
+        $("#PostPopupDiv").css("display", "none")
+        $("#CreatePostPopupDiv").css("display", "none")
+        $("#DeletePostPopupDiv").css("display", "none")
+    })
 })

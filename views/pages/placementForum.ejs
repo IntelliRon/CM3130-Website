@@ -59,7 +59,7 @@
                                 <img class="locationArrow down" src="/images/Arrow.png">
                             </div>
                             <% for (const sublocation in locations[location]) {%>
-                                <div class="sublocationDiv hidden">
+                                <div id="<%= location_sublocation %>" class="sublocationDiv hidden">
                                     <p class="locationText">Sub Location <%= sublocation %></p>
                                 </div>
                             <% }; %>
@@ -127,5 +127,17 @@
         </div>
 
         <%- include('../partials/footer')%>
+
+        <script>
+            $(".sublocationDiv").on("click", function(){
+                let locationName = $(this).attr("id").split("_")[0];
+                let areaName = $(this).attr("id").split("_")[1];
+                let areaId = '<%= locations[locationName][areaName] %>';
+
+                console.log("Location : " + locationName);
+                console.log("Area : " + areaName);
+                console.log("Area ID : " + areaId);
+            });
+        </script>
     </body>
 </html>

@@ -1,17 +1,17 @@
 /**
  * Placement Hub Server
- * v.0.0.3
+ * v.0.0.4
  * 
- * 01/11/2024 - 15/11/2024
+ * 01/11/2024 - 18/11/2024
  */
-const VERSION = "v0.0.3";
+const VERSION = "v0.0.4";
 
 const CACHE_REFRESH_RATE = 60000; // in milliseconds
 
 
 var fs = require('fs');
 var util = require('util');
-var log_file = fs.createWriteStream(__dirname + 'logs/debug.log', {flags : 'w'});
+var log_file = fs.createWriteStream(__dirname + '/debug.log', { flags: 'a' });
 var log_stdout = process.stdout;
 
 // Override the console.log method to write to a debug file instead
@@ -29,7 +29,7 @@ console.log("Running on server version " + VERSION);
 
 // Get all environment variables
 require('dotenv').config();
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const mongo = require('mongodb');
 
 const SERVER_PORT = process.env.PORT | 8080; // Default port to 8080
 
@@ -40,9 +40,9 @@ if (!process.env.DATABASE_USERNAME || !process.env.DATABASE_PASSWORD) {
 }
 
 const url = "mongodb+srv://" + process.env.DATABASE_USERNAME + ":" + process.env.DATABASE_PASSWORD + "@cluster0.vtqin.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
-const client = new MongoClient(url, {
+const client = new mongo.MongoClient(url, {
     serverApi: {
-        version: ServerApiVersion.v1,
+        version: mongo.ServerApiVersion.v1,
         strict: true,
         deprecationErrors: true,
     }
@@ -156,7 +156,7 @@ app.get("/thread", function(req, res) {
 })
 
 app.get("/register", function(req, res) {
-    res.render("pages/signup");
+    res.render("pages/signup", {loggedin: req.session.loggedin});
     // Registration page
 });
 
@@ -166,13 +166,37 @@ app.get("/profile/edit", function(req, res) {
 });
 
 
+app.get("/loadthreads", function(req, res) {
+    // Sideload all the threads here using pagination and checking location)
+    let locationID = req.query.locationid;
+
+    if (!locationID) {
+        res.send({"Error": "No locationID provided (must be 24 character hex string)"});
+    }
+
+    let page = req.query.page | 1;
+    
+    let result = db.collection('Threads').aggregate([{
+        "$match": {
+            "$or": [{"locationID": mongo.ObjectId.createFromHexString(locationID)}]
+        }
+    }, {
+        "$facet" : {
+            metadata : [{ "$count": 'totalCount' }],
+            data: [{ "$skip": (page - 1) * 10}, { "$limit": 10 }]
+        }
+    }]).toArray().then((result) => {
+        console.log(result);
+
+        res.status(200);
+        res.send(result);
+        return;
+    });
+});
+
+
 
 /* POST Routes */
-
-app.post("/loadthreads", function(req, res) {
-    res.send("Hmm. You shouldn't be here! This page is still under development");
-    // Sideload all the threads here (remember to use pagination. Don't load ALL posts at once)
-});
 
 app.post("/dologin", function(req, res) {
     // Validate the login for the user and reroute them back to home
@@ -352,3 +376,37 @@ app.use(function(req, res) {
     res.status(404);
     res.render("pages/error404");
 })
+
+
+
+// https://stackoverflow.com/questions/14031763/doing-a-cleanup-action-just-before-node-js-exits
+// Cleanup code for when the program finishes.
+process.stdin.resume(); // so the program will not close instantly
+
+function exitHandler(options, exitCode) {
+    console.log("Stopping server");
+    if (options.cleanup) {
+        console.log("Cleaning up")
+    };
+
+    if (exitCode || exitCode === 0) console.log("Exit code " + exitCode);
+    console.log("Server stopped");
+    if (options.exit) {
+        client.close();
+        log_file.close();
+        process.exit()
+    };
+}
+
+// do something when app is closing
+process.on('exit', exitHandler.bind(null,{cleanup:true}));
+
+// catches ctrl+c event
+process.on('SIGINT', exitHandler.bind(null, {exit:true}));
+
+// catches "kill pid" (for example: nodemon restart)
+process.on('SIGUSR1', exitHandler.bind(null, {exit:true}));
+process.on('SIGUSR2', exitHandler.bind(null, {exit:true}));
+
+// catches uncaught exceptions
+process.on('uncaughtException', exitHandler.bind(null, {exit:true}));

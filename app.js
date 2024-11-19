@@ -1,10 +1,10 @@
 /**
  * Placement Hub Server
- * v.0.0.4
+ * v.0.0.5
  * 
  * 01/11/2024 - 18/11/2024
  */
-const VERSION = "v0.0.4";
+const VERSION = "v0.0.5";
 
 const CACHE_REFRESH_RATE = 60000; // in milliseconds
 
@@ -223,6 +223,7 @@ app.post("/dologin", function(req, res) {
             if (checkPassword) { // Log the user in, if the password is correct
                 req.session.loggedin = true;
                 req.session.email = email;
+                req.session.userID = result._id;
                 req.session.userLevel = result.userLevel;
                 req.session.placementLocationID = result.placementLocationID;
                 res.redirect('/');
@@ -241,10 +242,18 @@ app.post("/dologin", function(req, res) {
 app.post("/doregister", function(req, res) {
     // Register the new user and log them in. Reroute them to the profile page
 
-    let fname = req.body.first_name;
-    let lname = req.body.last_name;
-    let email = req.body.email;
+    let fname = req.body.forename;
+    let lname = req.body.surname;
+    let email = req.body.universityEmail;
     let pword = req.body.password;
+
+    if (pword !== req.body.confirmPassword) {
+        failReason += "password does not match";
+        encodeURI(failReason);
+        redirectURL += "/register?reason="+failReason;
+        res.redirect(redirectURL);
+        return;
+    }
     let uni = req.body.university;
     
     db.collection('Users').findOne({
@@ -257,6 +266,7 @@ app.post("/doregister", function(req, res) {
             failReason += "already exists";
             encodeURI(failReason);
             redirectURL += "/register?reason="+failReason;
+            res.redirect(redirectURL);
         } else {
             // 9 rounds of salting should be enough
             bcrypt.hash(pword, 9, function(err, hash) {
@@ -268,7 +278,7 @@ app.post("/doregister", function(req, res) {
                 }
 
                 // Store the new user in the database
-                let result = db.collection('Users').insertOne({
+                db.collection('Users').insertOne({
                     "firstName": fname,
                     "lastName": lname,
                     "email": email,
@@ -276,19 +286,12 @@ app.post("/doregister", function(req, res) {
                     "university": uni,
                     "placementLocationID": null,
                     "userLevel": 1 // Moderation
-                }).then((err, result) => {
-                    if (err) {
-                        console.log(err);
-                        res.status(500);
-                        res.send("500: Internal server error");
-                        return;
-                    }
-
+                }).then((insertResult) => {
                     // Log the new user in
                     req.session.loggedin = true;
                     req.session.email = email;
                     req.session.userLevel = 1;
-                    req.session.placementLocationID = null;
+                    req.session.placementLocationID = insertResult.insertedId;
                     res.redirect("/");
                 });
             });
@@ -357,7 +360,43 @@ app.post("/douseredit", function(req, res) {
 });
 
 app.post("/sendpost", function(req, res) {
-    res.send("Hmm. You shouldn't be here! This page is still under development");
+    if (!req.session.loggedin) {
+        res.send("Error. User must be logged in");
+        return;
+    }
+
+    if (req.session.userLevel < 1) {
+        res.send("Error. No permission to post");
+        return;
+    }
+
+    let title = req.body.postTitle;
+    let locationID = req.body.locationID;
+    let content = req.body.postBody;
+    let postUserID = req.session.userID;
+    let postDateTime = new Date();
+
+    if (!locationID) {
+        res.send("Error. LocationID not set correctly");
+        return;
+    }
+
+    let insertionObject = {
+        "title": title,
+        "locationID": mongo.ObjectId.createFromHexString(locationID),
+        "content": content,
+        "postUserID": postUserID,
+        "postDateTime": postDateTime,
+        comments: []
+    };
+
+    console.log(insertionObject);
+    
+    db.collection('Threads').insertOne(insertionObject).then((insertResult) => {
+        // Redirect the user to their post once the thread has been created
+        res.redirect("/thread?postID="+insertResult.insertedId);
+    });
+
     // Send the new post to the server
 });
 
@@ -369,6 +408,8 @@ app.post("/sendreaction", function(req, res) {
 app.post("/sendreply", function(req, res) {
     res.send("Hmm. You shouldn't be here! This page is still under development");
     // Send the new reply for a post to the server
+
+    
 });
 
 /* Error handling */

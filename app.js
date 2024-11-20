@@ -1,10 +1,10 @@
 /**
  * Placement Hub Server
- * v.0.0.7
+ * v.0.0.8
  * 
  * 01/11/2024 - 18/11/2024
  */
-const VERSION = "v0.0.7";
+const VERSION = "v0.0.8";
 
 const CACHE_REFRESH_RATE = 60000; // in milliseconds
 
@@ -157,11 +157,12 @@ app.get("/forum/placements", function(req, res) {
             cursor.forEach(element => {
                 let area = element.area.replace(" ", "_");
                 let location = element.name.replace(" ", "_");
-                let tempName = {};
-                tempName[location] = element._id;
                 if (placementLocations.hasOwnProperty(area)) {
-                    placementLocations[area].append(tempName);
+                    console.log(placementLocations[area]);
+                    placementLocations[area][location] = element._id;
                 } else {
+                    let tempName = {};
+                    tempName[location] = element._id;
                     placementLocations[area] = tempName;
                 }
             }).then(() => {

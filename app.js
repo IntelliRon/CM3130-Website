@@ -1,10 +1,10 @@
 /**
  * Placement Hub Server
- * v.0.0.5
+ * v.0.0.6
  * 
  * 01/11/2024 - 18/11/2024
  */
-const VERSION = "v0.0.5";
+const VERSION = "v0.0.6";
 
 const CACHE_REFRESH_RATE = 60000; // in milliseconds
 
@@ -92,6 +92,39 @@ async function connectDB() {
     });
 }
 
+// Get a random integer between min (inclusive) and max (exclusive)
+function getRandomInt(max=1, min=0) {
+    return Math.floor(Math.random() * (max - min) + min);
+}
+
+function anonymiseUsers(inputList) {
+    let userIDs = {};
+
+    // Anonymise the posting user ID
+    let randomUsername = "user" + getRandomInt(10000, 100);
+    userIDs[inputList.postUserID] = randomUsername;
+    inputList.postUserID = randomUsername;
+
+    /* Anonymise the commenting user IDs by replacing with random usernames.
+     * This (and above posting user ID anonymisation) is random each time the page reloads 
+     * (e.g. switched to a different thread), so a user cannot be tracked across pages by other users.
+     */
+    if (inputList.comments) {
+        for (let i = 0; i < inputList.comments.length; i++) {
+            if (!userIDs.hasOwnProperty(inputList.comments[i].commentUserID)) {
+                randomUsername = "user" + getRandomInt(10000, 100);
+                userIDs[inputList.comments[i].commentUserID] = randomUsername;
+                inputList.comments[i].commentUserID = randomUsername;
+            } else {
+                // If the username already exists in the list, then use that username to avoid confusion when reading a thread
+                inputList.comments[i].commentUserID = userIDs[inputList.comments[i].commentUserID];
+            }
+        }
+    }
+
+    return inputList;
+}
+
 // Tell express to allow use of the public folder for things such as scripts
 app.use(express.static('public'));
 
@@ -152,6 +185,27 @@ app.get("/forum/accomodation", function(req, res) {
 
 app.get("/thread", function(req, res) {
     res.render("pages/dev");
+
+    let postID = req.query.postID;
+
+    if (!postID) {
+        res.send("Error. PostID not set correctly")
+    }
+
+    db.collection('Thread').findOne({"_id": mongo.ObjectId.createFromHexString(postID)})
+    .then(result => {
+        if (!result) {
+            res.render("pages/error404");
+            return;
+        }
+
+        result = anonymiseUsers(result);
+
+        res.render("pages/thread", {
+            loggedin: req.session.loggedin,
+            threadContent: result
+        })
+    });
     // Render a thread here (main post, comments, etc.)
 })
 
@@ -186,7 +240,10 @@ app.get("/loadthreads", function(req, res) {
             data: [{ "$skip": (page - 1) * 10}, { "$limit": 10 }]
         }
     }]).toArray().then((result) => {
-        console.log(result);
+        for (let i = 0; i < result[0].data.length; i++) {
+            //console.log(threads[i]);
+            result[0].data[i] = anonymiseUsers(result[0].data[i]);
+        }
 
         res.status(200);
         res.send(result);

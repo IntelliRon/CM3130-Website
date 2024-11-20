@@ -41,7 +41,7 @@ $(function(){
             console.log(JSON.stringify(postData));
 
             var postContainer = $("#PostsContainer");
-            (".postDiv").remove();
+            $(".postDiv").remove();
 
             let i = 0;
             for(post in postData[data]){

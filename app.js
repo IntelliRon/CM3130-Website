@@ -158,7 +158,6 @@ app.get("/forum/placements", function(req, res) {
                 let area = element.area.replace(" ", "_");
                 let location = element.name.replace(" ", "_");
                 if (placementLocations.hasOwnProperty(area)) {
-                    console.log(placementLocations[area]);
                     placementLocations[area][location] = element._id;
                 } else {
                     let tempName = {};
@@ -250,7 +249,6 @@ app.get("/loadthreads", function(req, res) {
         }
     }]).toArray().then((result) => {
         for (let i = 0; i < result[0].data.length; i++) {
-            //console.log(threads[i]);
             result[0].data[i] = anonymiseUsers(result[0].data[i], (req.session.loggedin) ? req.session.userID : null);
         }
 
@@ -455,8 +453,6 @@ app.post("/sendpost", function(req, res) {
         "postDateTime": postDateTime,
         comments: []
     };
-
-    console.log(insertionObject);
     
     db.collection('Threads').insertOne(insertionObject).then((insertResult) => {
         // Redirect the user to their post once the thread has been created

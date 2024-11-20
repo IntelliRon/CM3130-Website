@@ -52,13 +52,13 @@
                     <% for (const location in locations) {%>
                         <div class="generalLocationDiv">
                             <div class="locationDiv">
-                                <p class="locationText">Placement Hubs for <%= location %></p>
+                                <p class="locationText">Placement Hubs for <%= location.replace("_", " ") %></p>
                                 <img class="locationArrow down" src="/images/Arrow.png">
                             </div>
                             <% for (const sublocation in locations[location]) {%>
                                 <% var locationId = locations[location][sublocation] %>
                                 <div id="<%= locationId %>" class="sublocationDiv hidden">
-                                    <p class="locationText">Sub Location <%= sublocation %></p>
+                                    <p class="locationText">Sub Location <%= sublocation.replace("_", " ") %></p>
                                 </div>
                             <% }; %>
                         </div>

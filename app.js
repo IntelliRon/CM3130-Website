@@ -248,7 +248,6 @@ app.get("/loadthreads", function(req, res) {
             data: [{ "$skip": (page - 1) * 10}, { "$limit": 10 }]
         }
     }]).toArray().then((result) => {
-        console.log(result[0]);
         for (let i = 0; i < result[0].data.length; i++) {
             //console.log(threads[i]);
             result[0].data[i] = anonymiseUsers(result[0].data[i], (req.session.loggedin) ? req.session.userID : null);

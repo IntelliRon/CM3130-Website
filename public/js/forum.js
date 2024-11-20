@@ -38,7 +38,8 @@ $(function(){
     $(".sublocationDiv").on("click", function(){
         var locationId = $(this).attr("id");
         $.get("/loadthreads", {locationid : locationId}).done(function(postData){
-            console.log(JSON.stringify(postData));
+            //console.log(JSON.stringify(postData));
+            console.log(postData["data"])
 
             var postContainer = $("#PostsContainer");
             $(".postDiv").remove();

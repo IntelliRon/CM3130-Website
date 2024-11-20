@@ -216,6 +216,7 @@
     height: 40px;
     font-size: larger;
     padding: 0;
+    display: none;
 }
 
 #PostPopupDiv{

@@ -37,6 +37,10 @@ $(function(){
 
     $(".sublocationDiv").on("click", function(){
         var locationId = $(this).attr("id");
+
+        $("#CreatePostForum").append('<input type="hidden" name="locationId" value="' + locationId + '"/>');
+        $("#AddPostButton").css("display", "block")
+
         $.get("/loadthreads", {locationid : locationId}).done(function(postData){
             var postContainer = $("#PostsContainer");
             $(".postDiv").remove();

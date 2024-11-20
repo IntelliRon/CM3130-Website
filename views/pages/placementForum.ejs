@@ -59,7 +59,8 @@
                                 <img class="locationArrow down" src="/images/Arrow.png">
                             </div>
                             <% for (const sublocation in locations[location]) {%>
-                                <div id="<%= location.concat('_', sublocation) %>" class="sublocationDiv hidden">
+                                <% var locationId = location.concat('_', sublocation) %>
+                                <div id="<%= locationId %>" class="sublocationDiv hidden">
                                     <p class="locationText">Sub Location <%= sublocation %></p>
                                 </div>
                             <% }; %>

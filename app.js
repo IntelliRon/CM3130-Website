@@ -192,8 +192,6 @@ app.get("/forum/accomodation", function(req, res) {
 });
 
 app.get("/thread", function(req, res) {
-    res.render("pages/dev");
-
     let postID = req.query.postID;
 
     if (!postID) {

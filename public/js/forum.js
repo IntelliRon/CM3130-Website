@@ -44,7 +44,7 @@ $(function(){
             $(".postDiv").remove();
 
             let i = 0;
-            for(post in postData[data]){
+            for(post in postData["data"]){
                 postContainer.append("<div id='" + post["locationID"] + "_" + i + "' class='postDiv'></div>");
                 let currentPost = $("#" + post["locationID"] + "_" + i);
                 currentPost.append("<div class='postLeftColumn'></div>");

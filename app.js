@@ -198,7 +198,7 @@ app.get("/thread", function(req, res) {
         res.send("Error. PostID not set correctly")
     }
 
-    db.collection('Thread').findOne({"_id": mongo.ObjectId.createFromHexString(postID)})
+    db.collection('Threads').findOne({"_id": mongo.ObjectId.createFromHexString(postID)})
     .then(result => {
         if (!result) {
             res.render("pages/error404");

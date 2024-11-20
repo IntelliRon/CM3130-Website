@@ -60,11 +60,8 @@ $(function(){
                 if(post["comments"].length > 0){
                     currentPost.children(".postLeftColumn").children(".postDetail").append("<p>Last Reply " + post["postUserID"] + "</p>")
                 }
-                if(post["content"].length > 50){
-                    currentPost.children(".postLeftColumn").append("<p class='postSampleBody'>" + post["content"].splice(0, 50) + "...</p>")
-                } else {
-                    currentPost.children(".postLeftColumn").append("<p class='postSampleBody'>" + post["content"] + "</p>")
-                }
+
+                currentPost.children(".postLeftColumn").append("<p class='postSampleBody'>" + post["content"] + "</p>")
 
                 i++;
             };

@@ -45,25 +45,25 @@ $(function(){
             $(".postDiv").remove();
 
             let i = 0;
-            for(post in postData[0]["data"]){
+            for(post in postData["data"]){
                 console.log(post);
-                postContainer.append("<div id='" + postData[0]["data"][post]["locationID"] + "_" + i + "' class='postDiv'></div>");
-                let currentPost = $("#" + postData[0]["data"][post]["locationID"]["locationID"] + "_" + i);
+                postContainer.append("<div id='" + post["locationID"] + "_" + i + "' class='postDiv'></div>");
+                let currentPost = $("#" + post["locationID"] + "_" + i);
                 currentPost.append("<div class='postLeftColumn'></div>");
                 currentPost.append("<div class='postRightColumn'></div>");
 
-                currentPost.children(".postLeftColumn").append("<h3>" + postData[0]["data"][post]["locationID"]["title"] + "</h3>");
+                currentPost.children(".postLeftColumn").append("<h3>" + post["title"] + "</h3>");
                 currentPost.children(".postLeftColumn").append("<div class='postDetail'></div>");
-                currentPost.children(".postLeftColumn").children(".postDetail").append("<p>Posted By : " + postData[0]["data"][post]["locationID"]["postUserID"] + " * </p>")
-                currentPost.children(".postLeftColumn").children(".postDetail").append("<p>" + postData[0]["data"][post]["locationID"]["comments"].length + " replies * </p>")
+                currentPost.children(".postLeftColumn").children(".postDetail").append("<p>Posted By : " + post["postUserID"] + " * </p>")
+                currentPost.children(".postLeftColumn").children(".postDetail").append("<p>" + post["comments"].length + " replies * </p>")
 
-                if(postData[0]["data"][post]["locationID"]["comments"].length > 0){
-                    currentPost.children(".postLeftColumn").children(".postDetail").append("<p>Last Reply " + postData[0]["data"][post]["locationID"]["postUserID"] + "</p>")
+                if(post["comments"].length > 0){
+                    currentPost.children(".postLeftColumn").children(".postDetail").append("<p>Last Reply " + post["postUserID"] + "</p>")
                 }
-                if(postData[0]["data"][post]["locationID"]["content"].length > 50){
-                    currentPost.children(".postLeftColumn").append("<p class='postSampleBody'>" + postData[0]["data"][post]["locationID"]["content"].splice(0, 50) + "...</p>")
+                if(post["content"].length > 50){
+                    currentPost.children(".postLeftColumn").append("<p class='postSampleBody'>" + post["content"].splice(0, 50) + "...</p>")
                 } else {
-                    currentPost.children(".postLeftColumn").append("<p class='postSampleBody'>" + postData[0]["data"][post]["locationID"]["content"] + "</p>")
+                    currentPost.children(".postLeftColumn").append("<p class='postSampleBody'>" + post["content"] + "</p>")
                 }
 
                 i++;

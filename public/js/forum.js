@@ -51,10 +51,12 @@ $(function(){
                 let currentPost = $("#" + post["locationID"] + "_" + i);
                 currentPost.append("<div class='postLeftColumn'></div>");
                 currentPost.append("<div class='postRightColumn'></div>");
+                
                 currentPost.children(".postLeftColumn").append("<h3>" + post["title"] + "</h3>");
                 currentPost.children(".postLeftColumn").append("<div class='postDetail'></div>");
                 currentPost.children(".postLeftColumn").children(".postDetail").append("<p>Posted By : " + post["postUserID"] + " * </p>")
                 currentPost.children(".postLeftColumn").children(".postDetail").append("<p>" + post["comments"].length + " replies * </p>")
+
                 if(post["comments"].length > 0){
                     currentPost.children(".postLeftColumn").children(".postDetail").append("<p>Last Reply " + post["postUserID"] + "</p>")
                 }

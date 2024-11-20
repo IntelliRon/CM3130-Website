@@ -253,7 +253,7 @@ app.get("/loadthreads", function(req, res) {
         }
 
         res.status(200);
-        res.send(result);
+        res.send(result[0]);
         return;
     });
 });

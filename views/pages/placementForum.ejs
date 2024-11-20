@@ -129,16 +129,6 @@
 
         <%- include('../partials/footer')%>
 
-        <script>
-            $(".sublocationDiv").on("click", function(){
-                let locationName = $(this).attr("id").split("_")[0];
-                let areaName = $(this).attr("id").split("_")[1];
-                let areaId = '<%= locations[locationName][areaName] %>';
-
-                console.log("Location : " + locationName);
-                console.log("Area : " + areaName);
-                console.log("Area ID : " + areaId);
-            });
-        </script>
+        
     </body>
 </html>

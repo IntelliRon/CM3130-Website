@@ -245,7 +245,7 @@ app.get("/loadthreads", function(req, res) {
     }, {
         "$facet" : {
             metadata : [{ "$count": 'totalCount' }],
-            data: [{ "$skip": (page - 1) * 10}, { "$limit": 10 }]
+            data: [{ "$skip": (page - 1) * 10}, { "$limit": 10 }, {"$sort": {"postDateTime": -1}}]
         }
     }]).toArray().then((result) => {
         for (let i = 0; i < result[0].data.length; i++) {
@@ -382,7 +382,7 @@ app.post("/profile", function(req, res) {
 
         if (result.hasOwnProperty("placementLocationID")) {
             if (result.placementLocationID !== undefined && result.placementLocationID !== null) {
-                db.collection('Locations').findOne({"_id": result.placementLocationID}).then(locationResult => {
+                db.collection('Locations').findOne({"_id": mongo.ObjectId.createFromHexString(result.placementLocationID)}).then(locationResult => {
                     if (locationResult) {
                         locationName = locationResult.name + " // " + locationResult.area;
                     } else {

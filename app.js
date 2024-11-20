@@ -382,7 +382,7 @@ app.post("/profile", function(req, res) {
 
         if (result.hasOwnProperty("placementLocationID")) {
             if (result.placementLocationID !== undefined && result.placementLocationID !== null) {
-                db.collection('Locations').findOne({"_id": result.placementLocationID}).then(locationResult => {
+                db.collection('Locations').findOne({"_id": mongo.ObjectId.createFromHexString(result.placementLocationID)}).then(locationResult => {
                     if (locationResult) {
                         locationName = locationResult.name + " // " + locationResult.area;
                     } else {

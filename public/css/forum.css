@@ -29,6 +29,45 @@
     flex-direction: column;
 }
 
+#PostsContainer{   
+    color: black;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.postDiv{
+    background: #F9F9F9;
+    display: flex;
+    padding: 10px;
+}
+
+.postLeftColumn{
+    flex-basis: 90%;
+    display: flex;
+    flex-direction: column;
+}
+
+.postDetail{
+    display: flex;
+    gap: 5px;
+}
+
+.postDetail p{
+    margin: 0;
+}
+
+.postSampleBody{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 500px;
+    white-space: nowrap;
+}
+
+.postHighlight{
+    color: #9D91F5;
+}
+
 #ForumRightColumn{
     display: flex;
     flex-direction: column;

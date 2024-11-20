@@ -38,15 +38,11 @@ $(function(){
     $(".sublocationDiv").on("click", function(){
         var locationId = $(this).attr("id");
         $.get("/loadthreads", {locationid : locationId}).done(function(postData){
-            console.log(JSON.stringify(postData));
-            console.log(postData[0])
-
             var postContainer = $("#PostsContainer");
             $(".postDiv").remove();
 
             let i = 0;
             for(post of postData["data"]){
-                console.log(post);
                 postContainer.append("<div id='" + post["locationID"] + "_" + i + "' class='postDiv'></div>");
                 let currentPost = $("#" + post["locationID"] + "_" + i);
                 currentPost.append("<div class='postLeftColumn'></div>");
@@ -54,7 +50,7 @@ $(function(){
 
                 currentPost.children(".postLeftColumn").append("<h3>" + post["title"] + "</h3>");
                 currentPost.children(".postLeftColumn").append("<div class='postDetail'></div>");
-                currentPost.children(".postLeftColumn").children(".postDetail").append("<p>Posted By : " + post["postUserID"] + " * </p>")
+                currentPost.children(".postLeftColumn").children(".postDetail").append("<p>Posted By : <span class='postHighlight'>" + post["postUserID"] + "</span> * </p>")
                 currentPost.children(".postLeftColumn").children(".postDetail").append("<p>" + post["comments"].length + " replies * </p>")
 
                 if(post["comments"].length > 0){

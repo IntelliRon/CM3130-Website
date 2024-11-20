@@ -45,6 +45,7 @@ $(function(){
 
             let i = 0;
             for(post in postData["data"]){
+                console.log(post);
                 postContainer.append("<div id='" + post["locationID"] + "_" + i + "' class='postDiv'></div>");
                 let currentPost = $("#" + post["locationID"] + "_" + i);
                 currentPost.append("<div class='postLeftColumn'></div>");

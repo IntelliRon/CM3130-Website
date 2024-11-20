@@ -39,7 +39,7 @@ $(function(){
         var locationId = $(this).attr("id");
         $.get("/loadthreads", {locationid : locationId}).done(function(postData){
             console.log(JSON.stringify(postData));
-            console.log(postData["data"])
+            console.log(postData[0])
 
             var postContainer = $("#PostsContainer");
             $(".postDiv").remove();

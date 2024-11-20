@@ -59,7 +59,7 @@
                                 <img class="locationArrow down" src="/images/Arrow.png">
                             </div>
                             <% for (const sublocation in locations[location]) {%>
-                                <div class="sublocationDiv hidden">
+                                <div id="<%= location %>_<%= sublocation %>" class="sublocationDiv hidden">
                                     <p class="locationText">Sub Location <%= sublocation %></p>
                                 </div>
                             <% }; %>
@@ -95,30 +95,30 @@
                 </div>
                 <div id="BulletinContentDiv">
                     <div class="bulletingRowDiv">
-                        <div>
-                            <img src="">
-                            <div>
-                                <p>Shopping</p>
+                        <div class="BulletinItemDiv">
+                            <img class="bulletinImage" src="/images/BonAccord.png">
+                            <div class="bulletinItemHeadingDiv">
+                                <p class="bulletinItemHeading">Shopping</p>
                             </div>
                         </div>
-                        <div>
-                            <img src="">
-                            <div>
-                                <p>Fun</p>
+                        <div class="BulletinItemDiv">
+                            <img class="bulletinImage" src="/images/Codonas_Logo.png">
+                            <div class="bulletinItemHeadingDiv">
+                                <p class="bulletinItemHeading">Fun</p>
                             </div>
                         </div>
                     </div>
                     <div class="bulletingRowDiv">
-                        <div>
-                            <img src="">
-                            <div>
-                                <p>Shopping</p>
+                        <div class="BulletinItemDiv">
+                            <img class="bulletinImage" src="/images/UnionSquare.jpg">
+                            <div class="bulletinItemHeadingDiv">
+                                <p class="bulletinItemHeading">Shopping</p>
                             </div>
                         </div>
-                        <div>
-                            <img src="">
-                            <div>
-                                <p>Movies</p>
+                        <div class="BulletinItemDiv">
+                            <img class="bulletinImage" src="/images/vue_aberdeen.jpg">
+                            <div class="bulletinItemHeadingDiv">
+                                <p class="bulletinItemHeading">Movies</p>
                             </div>
                         </div>
                     </div>

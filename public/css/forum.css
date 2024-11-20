@@ -9,7 +9,7 @@
 #ForumLeftColumn{
     display: flex;
     flex-direction: column;
-    flex-basis: 25%;
+    flex-basis: 28%;
     gap: 5px;
 }
 
@@ -23,7 +23,7 @@
 }
 
 #ForumMiddleColumn{
-    flex-basis: 50%;
+    flex-grow: 1;
     background: #FFF;
     display: flex;
     flex-direction: column;
@@ -32,7 +32,7 @@
 #ForumRightColumn{
     display: flex;
     flex-direction: column;
-    flex-grow: 1; 
+    flex-basis: 28%;
     gap: 5px;
 }
 
@@ -47,8 +47,52 @@
 }
 
 #BulletinContentDiv{
+    display: flex;
+    flex-direction: column;
     background: #9BB2E4;
     flex-basis: 85%;
+    gap: 20px;
+    padding-top: 25px;
+    background-image: url(/images/WaveBackground.png);
+    background-size: cover;
+    background-blend-mode: darken;
+}
+
+.bulletingRowDiv{
+    display: flex;
+    justify-content: space-around;
+}
+
+.BulletinItemDiv{
+    position: relative;
+    z-index: 1;
+    flex-basis: 42.5%;
+}
+
+.bulletinImage{
+    width: 100%;
+    object-fit: cover;
+    border-radius: 25px;
+    border: #000;
+    border-style: solid;
+    border-width: 2px;
+    background-color: #FFF;
+}
+
+.bulletinItemHeadingDiv{
+    color: #000;
+    top: 20px;
+    position: absolute;
+    z-index: 2;
+    background: #FFC880;
+    left: 0;
+    width: 125px;
+    border-radius: 0px 0px 15px 0px;
+    padding: 3px 10px;
+}
+
+.bulletinItemHeading{
+    margin: 0;
 }
 
 .generalLocationDiv{

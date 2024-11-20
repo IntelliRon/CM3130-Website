@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('../partials/head')%>
+    
+    <title>Thread Discussion</title>
+
+    <link rel="stylesheet" href="/css/thread.css">
+</head>
+<body>
+    <%- include('../partials/header')%>
+
+    <%- include('../partials/UserDisplay')%>
+
+    
+    <a href="/forum/placements" class="back-button">⬅ Back</a>
+
+    
+    <div class="container">
+        
+        <div class="header">
+            <h1>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75l11.06-11.06-3.75-3.75L3 17.25zm13.06-11.06l3.75 3.75L21 8.31 15.69 3 14.31 4.19z"/></svg>
+                <%= threadContent["title"] %>
+            </h1>
+            <p><%= threadContent["postUserID"] %></p>
+            <p><%= threadContent["content"] %></p>
+        </div>
+
+        
+        <div class="comments">
+            <% for (const comment in threadContent["comments"]) %>
+            <div class="comment">
+                <div class="avatar" style="background-color: #6A8AFF;"></div>
+                <div class="content">
+                    <h3><%= comment["commentUserID"] %></h3>
+                    <p><%= comment["commentContent"] %></p>
+                    <div class="time"><%= comment["commentDateTime"] %></div>
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="pagination">
+            <span class="active">1</span>
+            <span>2</span>
+            <span>3</span>
+        </div>
+    </div>
+
+    
+    <div class="scroll-top" onclick="scrollToTop()">
+        ⬆
+    </div>
+
+    <%- include('../partials/footer')%>
+
+    <script>
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+</body>
+</html>

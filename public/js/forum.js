@@ -34,4 +34,11 @@ $(function(){
         $("#CreatePostPopupDiv").css("display", "none")
         $("#DeletePostPopupDiv").css("display", "none")
     })
+
+    $(".sublocationDiv").on("click", function(){
+        var locationId = $(this).attr("id");
+        $.get("/loadthreads", {locationId : locationId}).done(function(postData){
+            console.log(JSON.stringify(postData));
+        });
+    });
 })

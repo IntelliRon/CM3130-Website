@@ -1,10 +1,10 @@
 /**
  * Placement Hub Server
- * v.0.0.6
+ * v.0.0.7
  * 
  * 01/11/2024 - 18/11/2024
  */
-const VERSION = "v0.0.6";
+const VERSION = "v0.0.7";
 
 const CACHE_REFRESH_RATE = 60000; // in milliseconds
 
@@ -97,13 +97,17 @@ function getRandomInt(max=1, min=0) {
     return Math.floor(Math.random() * (max - min) + min);
 }
 
-function anonymiseUsers(inputList) {
+function anonymiseUsers(inputList, ownUserID) {
     let userIDs = {};
 
     // Anonymise the posting user ID
-    let randomUsername = "user" + getRandomInt(10000, 100);
-    userIDs[inputList.postUserID] = randomUsername;
-    inputList.postUserID = randomUsername;
+    if (ownUserID && inputList.postUserID === ownUserID) {
+        inputList.postUserID = "You";
+    } else {
+        let randomUsername = "user" + getRandomInt(10000, 100);
+        userIDs[inputList.postUserID] = randomUsername;
+        inputList.postUserID = randomUsername;
+    }
 
     /* Anonymise the commenting user IDs by replacing with random usernames.
      * This (and above posting user ID anonymisation) is random each time the page reloads 
@@ -111,6 +115,10 @@ function anonymiseUsers(inputList) {
      */
     if (inputList.comments) {
         for (let i = 0; i < inputList.comments.length; i++) {
+            if (ownUserID && inputList.comments[i].commentUserID === ownUserID) {
+                inputList.comments[i].commentUserID = "You";
+                continue; // Skip to next comment
+            }
             if (!userIDs.hasOwnProperty(inputList.comments[i].commentUserID)) {
                 randomUsername = "user" + getRandomInt(10000, 100);
                 userIDs[inputList.comments[i].commentUserID] = randomUsername;
@@ -199,7 +207,7 @@ app.get("/thread", function(req, res) {
             return;
         }
 
-        result = anonymiseUsers(result);
+        result = anonymiseUsers(result, (req.session.loggedin) ? req.session.userID : null);
 
         res.render("pages/thread", {
             loggedin: req.session.loggedin,
@@ -232,7 +240,7 @@ app.get("/loadthreads", function(req, res) {
     
     let result = db.collection('Threads').aggregate([{
         "$match": {
-            "$or": [{"locationID": mongo.ObjectId.createFromHexString(locationID)}]
+            "$or": [{"locationID": locationID}]
         }
     }, {
         "$facet" : {
@@ -240,9 +248,10 @@ app.get("/loadthreads", function(req, res) {
             data: [{ "$skip": (page - 1) * 10}, { "$limit": 10 }]
         }
     }]).toArray().then((result) => {
+        console.log(result[0]);
         for (let i = 0; i < result[0].data.length; i++) {
             //console.log(threads[i]);
-            result[0].data[i] = anonymiseUsers(result[0].data[i]);
+            result[0].data[i] = anonymiseUsers(result[0].data[i], (req.session.loggedin) ? req.session.userID : null);
         }
 
         res.status(200);
@@ -440,7 +449,7 @@ app.post("/sendpost", function(req, res) {
 
     let insertionObject = {
         "title": title,
-        "locationID": mongo.ObjectId.createFromHexString(locationID),
+        "locationID": locationID,
         "content": content,
         "postUserID": postUserID,
         "postDateTime": postDateTime,
@@ -482,14 +491,13 @@ app.use(function(req, res) {
 process.stdin.resume(); // so the program will not close instantly
 
 function exitHandler(options, exitCode) {
-    console.log("Stopping server");
     if (options.cleanup) {
         console.log("Cleaning up")
     };
 
     if (exitCode || exitCode === 0) console.log("Exit code " + exitCode);
-    console.log("Server stopped");
     if (options.exit) {
+        console.log("Server stopped");
         client.close();
         log_file.close();
         process.exit()

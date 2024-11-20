@@ -155,14 +155,14 @@ app.get("/forum/placements", function(req, res) {
             if (db.collection('Locations').estimatedDocumentCount({}) === 0) placementLocations = {"Error" : "No locations found"};
 
             cursor.forEach(element => {
-                if (placementLocations.hasOwnProperty(element.area)) {
-                    let tempName = {};
-                    tempName[element.name] = element._id;
-                    placementLocations[element.area].append(tempName);
+                let area = element.area.replace(" ", "_");
+                let location = element.name.replace(" ", "_");
+                let tempName = {};
+                tempName[location] = element._id;
+                if (placementLocations.hasOwnProperty(area)) {
+                    placementLocations[area].append(tempName);
                 } else {
-                    let tempName = {};
-                    tempName[element.name] = element._id;
-                    placementLocations[element.area] = tempName;
+                    placementLocations[area] = tempName;
                 }
             }).then(() => {
                 // {areaName: {locationName: locationID}}

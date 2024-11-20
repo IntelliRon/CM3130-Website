@@ -29,15 +29,16 @@
 
         
         <div class="comments">
-            <% for (const comment in threadContent["comments"]) %>
-            <div class="comment">
-                <div class="avatar" style="background-color: #6A8AFF;"></div>
-                <div class="content">
-                    <h3><%= comment["commentUserID"] %></h3>
-                    <p><%= comment["commentContent"] %></p>
-                    <div class="time"><%= comment["commentDateTime"] %></div>
+            <% for (const comment in threadContent["comments"]){ %>
+                <div class="comment">
+                    <div class="avatar" style="background-color: #6A8AFF;"></div>
+                    <div class="content">
+                        <h3><%= comment["commentUserID"] %></h3>
+                        <p><%= comment["commentContent"] %></p>
+                        <div class="time"><%= comment["commentDateTime"] %></div>
+                    </div>
                 </div>
-            </div>
+            <% } %>
         </div>
 
         

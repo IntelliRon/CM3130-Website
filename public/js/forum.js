@@ -39,6 +39,31 @@ $(function(){
         var locationId = $(this).attr("id");
         $.get("/loadthreads", {locationid : locationId}).done(function(postData){
             console.log(JSON.stringify(postData));
+
+            var postContainer = $("#PostsContainer");
+            (".postDiv").remove();
+
+            let i = 0;
+            for(post in postData[data]){
+                postContainer.append("<div id='" + post["locationID"] + "_" + i + "' class='postDiv'></div>");
+                let currentPost = $("#" + post["locationID"] + "_" + i);
+                currentPost.append("<div class='postLeftColumn'></div>");
+                currentPost.append("<div class='postRightColumn'></div>");
+                currentPost.children(".postLeftColumn").append("<h3>" + post["title"] + "</h3>");
+                currentPost.children(".postLeftColumn").append("<div class='postDetail'></div>");
+                currentPost.children(".postLeftColumn").children(".postDetail").append("<p>Posted By : " + post["postUserID"] + " * </p>")
+                currentPost.children(".postLeftColumn").children(".postDetail").append("<p>" + post["comments"].length + " replies * </p>")
+                if(post["comments"].length > 0){
+                    currentPost.children(".postLeftColumn").children(".postDetail").append("<p>Last Reply " + post["postUserID"] + "</p>")
+                }
+                if(post["content"].length > 50){
+                    currentPost.children(".postLeftColumn").append("<p class='postSampleBody'>" + post["content"].splice(0, 50) + "...</p>")
+                } else {
+                    currentPost.children(".postLeftColumn").append("<p class='postSampleBody'>" + post["content"] + "</p>")
+                }
+
+                i++;
+            };
         });
     });
 })

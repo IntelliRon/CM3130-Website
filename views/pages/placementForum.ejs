@@ -15,35 +15,39 @@
         <div id="PostPopupDiv">
             <div id="CreatePostBackground"></div>
 
-            <div id="CreatePostPopupDiv">
-                <form id="CreatePostForum" action="/sendPost" method="post">
-                    <div id="CreatePostHeadingDiv">
-                        <div id="CreatePostInputDiv">
-                            <input id="CreatePostInput" type="text" placeholder="Give your post a Title?" name="postTitle">
-                            <p id="CreatePostTooltip">?</p>
+            <% if(loggedin){ %>
+                <div id="CreatePostPopupDiv">
+                    <form id="CreatePostForum" action="/sendPost" method="post">
+                        <div id="CreatePostHeadingDiv">
+                            <div id="CreatePostInputDiv">
+                                <input id="CreatePostInput" type="text" placeholder="Give your post a Title?" name="postTitle">
+                                <p id="CreatePostTooltip">?</p>
+                            </div>
+                            <div>
+                                <p id="CreatePostExitButton"><strong>X</strong></p>
+                            </div>
                         </div>
-                        <div>
-                            <p id="CreatePostExitButton"><strong>X</strong></p>
-                        </div>
-                    </div>
-                    <div id="CreatePostBodyDiv">
-                        <textarea id="CreatePostBodyTextarea" placeholder="What's on your mind?" name="postBody"></textarea>
-                        <div id="CreatePostBodySideDiv">
-                            <img id="CreatePostLogo" src="/images/Logo.PNG">
-                            <button id="PostButton"><strong>POST!</strong></button>
-                        </div>
-                    </div> 
-                </form>
-            </div>
-
-            <div id="DeletePostPopupDiv">
-                <img id="DeleteWarningIcon" src="/images/Warning.png">
-                <h5>Deleting this post will delete the entire thread!</h5>
-                <div id="DeleteButtonsDiv">
-                    <button><strong>Delete</strong></button>
-                    <button>Go Back</button>
+                        <div id="CreatePostBodyDiv">
+                            <textarea id="CreatePostBodyTextarea" placeholder="What's on your mind?" name="postBody"></textarea>
+                            <div id="CreatePostBodySideDiv">
+                                <img id="CreatePostLogo" src="/images/Logo.PNG">
+                                <button id="PostButton"><strong>POST!</strong></button>
+                            </div>
+                        </div> 
+                    </form>
                 </div>
-            </div>
+            <% } %>
+
+            <% if(loggedin){ %>
+                <div id="DeletePostPopupDiv">
+                    <img id="DeleteWarningIcon" src="/images/Warning.png">
+                    <h5>Deleting this post will delete the entire thread!</h5>
+                    <div id="DeleteButtonsDiv">
+                        <button><strong>Delete</strong></button>
+                        <button>Go Back</button>
+                    </div>
+                </div>
+            <% } %>
         </div>
 
         <div id="ForumContainer">
@@ -74,7 +78,9 @@
                     <h3>Posts</h3>
                     <p>Last Updated <%= new Date().toLocaleTimeString() %></p>
                     <div id="PostHeadingGap"></div>
-                    <button id="AddPostButton"><strong>+</strong></button>
+                    <% if(loggedin){ %>
+                        <button id="AddPostButton"><strong>+</strong></button>
+                    <% } %>
                 </div>
                 <div id="PostBody">
                     <div id="PostsContainer">

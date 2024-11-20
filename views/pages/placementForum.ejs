@@ -59,11 +59,8 @@
                                 <img class="locationArrow down" src="/images/Arrow.png">
                             </div>
                             <% for (const sublocation in locations[location]) {%>
-                                <% var locationId = location.concat('_', sublocation) %>
+                                <% var locationId = locations[location][sublocation] %>
                                 <div id="<%= locationId %>" class="sublocationDiv hidden">
-                                    <% $(this).on("click", function(){
-                                        console.log("Sublocation Clicked");
-                                    }) %>
                                     <p class="locationText">Sub Location <%= sublocation %></p>
                                 </div>
                             <% }; %>

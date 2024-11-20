@@ -61,6 +61,9 @@
                             <% for (const sublocation in locations[location]) {%>
                                 <% var locationId = location.concat('_', sublocation) %>
                                 <div id="<%= locationId %>" class="sublocationDiv hidden">
+                                    <% $(this).on("click", function(){
+                                        console.log("Sublocation Clicked");
+                                    }) %>
                                     <p class="locationText">Sub Location <%= sublocation %></p>
                                 </div>
                             <% }; %>
@@ -128,21 +131,5 @@
         </div>
 
         <%- include('../partials/footer')%>
-
-        <script>
-            $(".sublocationDiv").on("click", function(){
-                let locationName = $(this).attr("id").split("_")[0];
-                console.log("Location : " + locationName);
-
-                let areaName = $(this).attr("id").split("_")[1];
-                console.log("Area : " + areaName);
-
-                "<%= let locationName = $(this).attr('id').split('_')[0] %>"
-                "<%= let areaName = $(this).attr('id').split('_')[1] %>"
-                let areaId = '<%= locations[locationName][areaName] %>';
-                console.log("Area ID : " + areaId);
-
-            });
-        </script>
     </body>
 </html>

@@ -37,7 +37,7 @@ $(function(){
 
     $(".sublocationDiv").on("click", function(){
         var locationId = $(this).attr("id");
-        $.get("/loadthreads", {locationId : locationId}).done(function(postData){
+        $.get("/loadthreads", {locationid : locationId}).done(function(postData){
             console.log(JSON.stringify(postData));
         });
     });

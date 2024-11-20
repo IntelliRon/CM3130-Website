@@ -29,11 +29,17 @@
     flex-direction: column;
 }
 
+#PostBody{
+    height: 100%;
+}
+
 #PostsContainer{   
     color: black;
     display: flex;
     flex-direction: column;
     gap: 15px;
+    height: 100%;
+    overflow: scroll;
 }
 
 .postDiv{

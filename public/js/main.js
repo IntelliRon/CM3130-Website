@@ -12,7 +12,7 @@ $(function(){
 
     $("#SidebarProfileIcon").on("click", function(){
         $.post("/profile", function(data){
-            let fullname = data.firstName.concat(" ", data.lastName);
+            let fullname = data.firstName.concat(" ", data.lastName).concat(" (", data.id) + ")";
             
             $("#UsersNameText").text(fullname);
             $("#UsersEmailText").text(data.email);
@@ -29,5 +29,8 @@ $(function(){
 
     $("#UserExitButton").on("click", function(){
         $("#UserDiv").css("display", "none")
+    })
+    $("#UserLogoutButton").on("click", function(){
+        window.location.replace("/logout")
     })
 })

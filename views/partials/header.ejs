@@ -39,4 +39,11 @@
             <p>Forum</p>
         </div>
     </a>
+    <% if(userLevel >= 10) {%>
+        <a href="/moderation">
+            <div class="sideBarButton" id="ModNavButton">
+                <p>Moderator Panel</p>
+            </div>
+        </a>
+    <% } %>
 </div>   

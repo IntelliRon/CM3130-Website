@@ -1,10 +1,10 @@
 /**
  * Placement Hub Server
- * v.0.0.8
+ * v.0.0.9
  * 
  * 01/11/2024 - 18/11/2024
  */
-const VERSION = "v0.0.8";
+const VERSION = "v0.0.9";
 
 const CACHE_REFRESH_RATE = 60000; // in milliseconds
 
@@ -97,9 +97,10 @@ function getRandomInt(max=1, min=0) {
     return Math.floor(Math.random() * (max - min) + min);
 }
 
-function anonymiseUsers(inputList, ownUserID) {
+function anonymiseUsers(inputList, ownUserID, ownUserLevel) {
     let userIDs = {};
 
+    let originalPostUserID = inputList.postUserID;
     // Anonymise the posting user ID
     if (ownUserID && inputList.postUserID === ownUserID) {
         inputList.postUserID = "You";
@@ -109,14 +110,19 @@ function anonymiseUsers(inputList, ownUserID) {
         inputList.postUserID = randomUsername;
     }
 
+    // Moderator can see user IDs
+    if (ownUserLevel >= 10) inputList.postUserID += originalPostUserID;
+
     /* Anonymise the commenting user IDs by replacing with random usernames.
      * This (and above posting user ID anonymisation) is random each time the page reloads 
      * (e.g. switched to a different thread), so a user cannot be tracked across pages by other users.
      */
     if (inputList.comments) {
         for (let i = 0; i < inputList.comments.length; i++) {
+            let originalCommentUserID = inputList.comments[i].commentUserID;
             if (ownUserID && inputList.comments[i].commentUserID === ownUserID) {
                 inputList.comments[i].commentUserID = "You";
+                if (ownUserLevel >= 10) inputList.comments[i].commentUserID += originalCommentUserID;
                 continue; // Skip to next comment
             }
             if (!userIDs.hasOwnProperty(inputList.comments[i].commentUserID)) {
@@ -127,26 +133,14 @@ function anonymiseUsers(inputList, ownUserID) {
                 // If the username already exists in the list, then use that username to avoid confusion when reading a thread
                 inputList.comments[i].commentUserID = userIDs[inputList.comments[i].commentUserID];
             }
+            if (ownUserLevel >= 10) inputList.comments[i].commentUserID += originalCommentUserID;
         }
     }
 
     return inputList;
 }
 
-// Tell express to allow use of the public folder for things such as scripts
-app.use(express.static('public'));
-
-
-
-/* GET Routes */
-
-app.get("/", function(req, res) {
-    // Render the homepage
-    res.render("pages/index", {loggedin: req.session.loggedin});
-});
-
-
-app.get("/forum/placements", function(req, res) {
+function getCachedLocations(callback) {
     // If the cache is outdated, get a new version from the database
     // (to ensure that new locations are actually added)
     if (Date.now() - pLocUpdateTime > CACHE_REFRESH_RATE) {
@@ -165,23 +159,69 @@ app.get("/forum/placements", function(req, res) {
                     placementLocations[area] = tempName;
                 }
             }).then(() => {
-                // {areaName: {locationName: locationID}}
-                res.render("pages/placementForum", {
-                    loggedin: req.session.loggedin,
-                    locations: placementLocations, // All locations
-                    // Preselect the user's location by their home location
-                    preferredLocation: (req.session.loggedin) ? req.session.placementLocationID : null
-                });
+                callback(placementLocations);
             });
         
     } else {
-        res.render("pages/placementForum", {
-            loggedin: req.session.loggedin,
-            locations: placementLocations, // All locations
-            // Preselect the user's location by their home location
-            preferredLocation: (req.session.loggedin) ? req.session.placementLocationID : null
-        });
+        callback(placementLocations);
     }
+}
+
+function getDBUser(userID, callback, errorCallback) {
+    db.collection('Users').findOne({_id: mongo.ObjectId.createFromHexString(userID)}).then(result => {
+        if (!result) {
+            if (errorCallback) errorCallback("No result")
+                return;
+        }
+        
+        callback(result);
+
+        return;
+    });
+}
+
+// Tell express to allow use of the public folder for things such as scripts
+app.use(express.static('public'));
+
+
+
+/* GET Routes */
+
+app.get("/", function(req, res) {
+    // Render the homepage
+    res.render("pages/index", {loggedin: req.session.loggedin, userLevel: req.session.userLevel});
+});
+
+
+app.get("/forum/placements", function(req, res) {
+    getCachedLocations((locations) => {
+        if (req.session.loggedin) {
+            getDBUser(req.session.userID, (user) => {
+                res.render("pages/placementForum", {
+                    muted: (user.hasOwnProperty("muted")) ? user.muted : false,
+                    loggedin: req.session.loggedin,
+                    userLevel: req.session.userLevel,
+                    locations: locations, // All locations
+                    // Preselect the user's location by their home location
+                    preferredLocation: (req.session.loggedin) ? req.session.placementLocationID : null
+                });
+                return;
+            }, e => {
+                res.status(404);
+                res.render("pages/error404");
+            });
+        } else {
+            res.render("pages/placementForum", {
+                muted: true,
+                loggedin: req.session.loggedin,
+                userLevel: req.session.userLevel,
+                locations: locations, // All locations
+                // Preselect the user's location by their home location
+                preferredLocation: (req.session.loggedin) ? req.session.placementLocationID : null
+            });
+            return;
+        }
+    });
 
     // Render the main forum page here
 });
@@ -196,6 +236,7 @@ app.get("/thread", function(req, res) {
 
     if (!postID) {
         res.send("Error. PostID not set correctly")
+        return;
     }
 
     db.collection('Threads').findOne({"_id": mongo.ObjectId.createFromHexString(postID)})
@@ -205,24 +246,68 @@ app.get("/thread", function(req, res) {
             return;
         }
 
-        result = anonymiseUsers(result, (req.session.loggedin) ? req.session.userID : null);
+        if (req.session.loggedin) {
+            getDBUser(req.session.userID, (user) => {
+                result = anonymiseUsers(result, (req.session.loggedin) ? req.session.userID : null, req.session.userLevel);
 
-        res.render("pages/thread", {
-            loggedin: req.session.loggedin,
-            threadContent: result
-        })
+                res.render("pages/thread", {
+                    muted: (user.hasOwnProperty("muted")) ? user.muted : false, // Could otherwise also be undefined
+                    loggedin: req.session.loggedin,
+                    userLevel: req.session.userLevel,
+                    threadContent: result
+                });
+                return;
+            }, e => {
+                res.status(404);
+                res.render("pages/error404");
+            });
+        } else {
+            result = anonymiseUsers(result, (req.session.loggedin) ? req.session.userID : null, req.session.userLevel);
+
+            res.render("pages/thread", {
+                muted: true,
+                loggedin: req.session.loggedin,
+                userLevel: req.session.userLevel,
+                threadContent: result
+            });
+            return;
+        }
     });
     // Render a thread here (main post, comments, etc.)
 })
 
 app.get("/register", function(req, res) {
-    res.render("pages/signup", {loggedin: req.session.loggedin});
+    res.render("pages/signup", {loggedin: req.session.loggedin, userLevel: req.session.userLevel});
     // Registration page
 });
 
 app.get("/profile/edit", function(req, res) {
     res.render("pages/dev");
     // Profile editing page
+});
+
+app.get("/moderation", function(req, res) {
+    // Admin panel
+    if (!req.session.loggedin || req.session.userLevel < 10) {
+        res.render("pages/error404");
+        res.status(404);
+        return;
+    }
+
+    res.render("pages/moderatorPanel", {
+        loggedin: req.session.loggedin,
+        userLevel: req.session.userLevel
+    });
+});
+
+app.get("/logout", function(req, res) {
+    req.session.loggedin = false;
+    req.session.email = null;
+    req.session.userID = null;
+    req.session.userLevel = null;
+    req.session.placementLocationID = null;
+
+    res.redirect("/");
 });
 
 
@@ -247,7 +332,7 @@ app.get("/loadthreads", function(req, res) {
         }
     }]).toArray().then((result) => {
         for (let i = 0; i < result[0].data.length; i++) {
-            result[0].data[i] = anonymiseUsers(result[0].data[i], (req.session.loggedin) ? req.session.userID : null);
+            result[0].data[i] = anonymiseUsers(result[0].data[i], (req.session.loggedin) ? req.session.userID : null, req.session.userLevel);
         }
 
         res.status(200);
@@ -390,8 +475,9 @@ app.post("/profile", function(req, res) {
 
                     // Send the processed user information to the user
                     res.send({
-                        firstName: result.firstName, 
-                        lastName: result.lastName, 
+                        firstName: result.firstName,
+                        lastName: result.lastName,
+                        id: result._id.toString(),
                         email: result.email,
                         location: locationName
                     });
@@ -399,7 +485,8 @@ app.post("/profile", function(req, res) {
             } else {
                 res.send({
                     firstName: result.firstName, 
-                    lastName: result.lastName, 
+                    lastName: result.lastName,
+                    id: result._id.toString(),
                     email: result.email,
                     location: locationName
                 });
@@ -413,6 +500,126 @@ app.post("/profile", function(req, res) {
                 location: locationName
             });
         }
+    });
+});
+
+app.post("/moderationUserDetails", function(req, res) {
+    if (!req.session.loggedin || req.session.userLevel < 10) {
+        res.status(404);
+        return;
+    }
+
+    let re = /[0-9A-Fa-f]{24}/g;
+    let userID = req.body.userID;
+
+    if (!re.test(userID)) return;
+
+    getDBUser(userID, result => {
+        let data = {};
+        data["UserId"] = result._id.toString();
+        data["LastName"] = result.lastName;
+        data["muted"] = result.muted || false;
+        data["UserLevel"] = result.userLevel;
+
+        if (req.session.userLevel >= 20) {
+            // The user is an admin
+            data["FirstName"] = result.firstName;
+            data["Email"] = result.email;
+            data["University"] = result.university;
+            if (result.placementLocationID) {
+            db.collection('Locations').findOne({"_id" : mongo.ObjectId.createFromHexString(result.placementLocationID)}).then(locationResult => {
+                if (!locationResult) {
+                    data["Location"] = "Invalid location";
+                    data["LocationID"] = -1;
+                    res.send(data);
+                    return;
+                }
+
+                data["Location"] = locationResult.name + " // " + locationResult.area;
+                data["LocationID"] = result.placementLocationID;
+                res.send(data);
+            });
+            } else {
+                data["Location"] = "Not set";
+                data["LocationID"] = -1;
+                res.send(data);
+            }
+        } else {
+            res.send(data);
+        }
+    });
+});
+
+app.post("/muteUser", function(req, res) {
+    if (!req.session.loggedin || req.session.userLevel < 10) {
+        res.status(404);
+        return;
+    }
+
+    let re = /[0-9A-Fa-f]{24}/g;
+    let userID = req.body.userID;
+
+    if (!re.test(userID)) return;
+
+    getDBUser(userID, result => {
+        // Toggle muted, or if they were never muted before, mute them
+        let muted = !result.muted ?? true;
+        
+        db.collection('Users').updateOne({"_id" : mongo.ObjectId.createFromHexString(userID)}, {"$set": {muted: muted}}).then(mutedResult => {
+            if (!mutedResult) return;
+
+            res.send({muted: muted, success: true});
+        });
+    });
+});
+
+app.post("/adminUserEdit", function(req, res) {
+    if (!req.session.loggedin || req.session.userLevel < 20) {
+        res.status(404);
+        return;
+    }
+
+    let re = /[0-9A-Fa-f]{24}/g;
+    let userID = req.body.userID;
+
+    if (!re.test(userID)) return;
+
+    getDBUser(userID, result => {
+        // Check that the user has a higher level than the user to update
+        if (result.userLevel >= req.session.userLevel) return;
+
+        // Update the user
+        let lname = req.body.LastName;
+        let fname = req.body.FirstName;
+        let email = req.body.Email;
+        let uni = req.body.University;
+        let locationID = req.body.LocationID;
+        let userLevel = Number(req.body.UserLevel);
+
+        // Make sure that the user is not giving the other a level higher or equal to themselves
+        // This prevents permission bootstrapping
+        if (userLevel >= req.session.userLevel) userLevel = req.session.userLevel - 1;
+
+        db.collection('Users').updateOne({"_id" : mongo.ObjectId.createFromHexString(userID)}, 
+            {"$set": {
+                firstName: fname,
+                lastName: lname,
+                email: email,
+                university: uni,
+                placementLocationID: locationID,
+                userLevel: userLevel
+            }
+        }).then(updateResult => {
+            if (!updateResult) return;
+
+            res.send({success: true});
+        });
+    });
+});
+
+app.post("/loadLocations", function(req, res) {
+    getCachedLocations((locations) => {
+        res.send(locations);
     });
 });
 
@@ -492,7 +699,7 @@ function exitHandler(options, exitCode) {
     if (exitCode || exitCode === 0) console.log("Exit code " + exitCode);
     if (options.exit) {
         console.log("Server stopped");
-        client.close();
+        client.close(true);
         log_file.close();
         process.exit()
     };

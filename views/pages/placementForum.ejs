@@ -15,7 +15,7 @@
         <div id="PostPopupDiv">
             <div id="CreatePostBackground"></div>
 
-            <% if(loggedin){ %>
+            <% if(loggedin && !muted){ %>
                 <div id="CreatePostPopupDiv">
                     <form id="CreatePostForum" action="/sendPost" method="post">
                         <div id="CreatePostHeadingDiv">
@@ -78,7 +78,7 @@
                     <h3>Posts</h3>
                     <p>Last Updated <%= new Date().toLocaleTimeString() %></p>
                     <div id="PostHeadingGap"></div>
-                    <% if(loggedin){ %>
+                    <% if(loggedin && !muted){ %>
                         <button id="AddPostButton"><strong>+</strong></button>
                     <% } %>
                 </div>

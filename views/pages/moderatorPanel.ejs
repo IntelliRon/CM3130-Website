@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <%- include('../partials/head')%>
+        <link rel="stylesheet" href="/css/moderation.css">
+
+        <script>var userLevel = "<%= userLevel%>"</script>
+        <script src="/js/forum.js"></script>
+        <% if (userLevel >= 20) { %>
+            <script src="/js/adminPanel.js"></script>
+        <% } else { %>
+            <script src="/js/moderatorPanel.js"></script>
+        <% } %>
+    </head>
+
+    <body>
+        <%- include('../partials/header')%>
+
+        <%- include('../partials/UserDisplay')%>
+
+        <!-- Main body here -->
+         <div id="ModerationContainer">
+            <div id="LeftPanelDiv"></div>
+
+            <div id="ModeratorPanelDiv">
+                <!-- Moderator & Admin content -->
+                <div class="InfoSection">
+                    <div id="SearchSection">
+                        <input type="text" placeholder="UserID" id="UserIDInput" />
+                        <button id="SearchButton">search</button>
+                    </div>
+                </div>
+
+                <div class="InfoSection" id="ErrorSection">
+                    <h4 id="ErrorNameText"></h4>
+                    <p id="ErrorDescriptionText"></p>
+                </div>
+
+                <div class="InfoSection" id="ModerationResultSection">
+                    <div id="UserDetailsSection">
+                        <h3 class="userDetailHeading">User ID</h3>
+                        <p id="UsersIDText">[No User Selected]</p>
+
+                        <h3 class="userDetailHeading">Last Name</h3>
+                        <p id="UsersLastNameText">[No User Selected]</p>
+
+                        <% if (userLevel >= 20) { %>
+                            <!-- Admin only content -->
+                            <h3 class="userDetailHeading">First Name</h3>
+                            <p id="UsersFirstNameText">[No User Selected]</p>
+
+                            <h3 class="userDetailHeading">Email</h3>
+                            <p id="UsersEmailModerationText">[No User Selected]</p>
+
+                            <h3 class="userDetailHeading">University</h3>
+                            <p id="UsersUniversityText">[No User Selected]</p>
+
+                            <h3 class="userDetailHeading">Placement Location</h3>
+                            <p id="UsersLocationModerationText">[No User Selected]</p>
+
+                            <h3 class="userDetailHeading">User Level</h3>
+                            <p class="userDetailHeading">(&LessSlantEqual;0=Muted, 1-9=User, 10-19=Moderator,&GreaterSlantEqual;20=Administrator)</p>
+                            <p id="UserLevelText">[No User Selected]</p>
+                        
+                        <% } %>
+                    </div>
+                    <% if (userLevel >= 20) { %>
+                        <div id="UserEditSection">
+                            <h3 class="userDetailHeading">Last Name</h3>
+                            <input type="text" placeholder="Last name" id="LastNameInput" />
+                            <h3 class="userDetailHeading">First Name</h3>
+                            <input type="text" placeholder="First name" id="FirstNameInput" />
+                            <h3 class="userDetailHeading">Email</h3>
+                            <input type="text" placeholder="Email" id="EmailInput" />
+                            <h3 class="userDetailHeading">University</h3>
+                            <input type="text" placeholder="University" id="UniversityInput" />
+                            <h3 class="userDetailHeading">Placement Location</h3>
+                            <select id="LocationInput"></select>
+                            <!-- <input type="text" placeholder="Placement Location" id="LocationInput" /> -->
+                            <h3 class="userDetailHeading">User Level</h3>
+                            <input type="number" min="1" max="<%= userLevel - 1 %>" placeholder="User Level" id="UserLevelInput" />
+                        </div>
+                    <% } %>
+
+                    <div id="ButtonsSection">
+                        <% if (userLevel >= 20) { %>
+                            <button id="EditButton">edit user</button>
+                        <% } %>
+                        <button id="MuteButton" disabled>mute user</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="RightPanelDiv"></div>
+         </div>
+
+        <%- include('../partials/footer')%>
+    </body>
+</html>

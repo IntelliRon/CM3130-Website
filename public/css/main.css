@@ -28,6 +28,7 @@ button {
 button:active {
     background-color: #68849B;
     border: 0;
+    padding: 5px 10px 15px 10px;
 }
 
 #NavBar {
@@ -194,6 +195,10 @@ footer {
 
 #UserExitButton {
     width: 40px;
+    height: 40px;
+}
+
+#UserLogoutButton {
     height: 40px;
 }
 

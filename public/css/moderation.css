@@ -1,0 +1,89 @@
+#ModerationContainer {
+    min-height: 900px;
+    display: flex;
+    flex-direction: row;
+    background: var(--tertiary-background);
+    gap: 5px;
+}
+
+#ModeratorPanelDiv {
+    align-items: center;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 15px 0px;
+}
+
+#LeftPanelDiv, #RightPanelDiv {
+    flex-grow: .2;
+    display: flex;
+    flex-direction: column;
+    padding: 5%;
+}
+
+#ModerationResultSection, #UserEditSection, #ErrorSection {
+    display: none;
+    text-align: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+input:not([type=button]) {
+    margin-top: 10px;
+    width: 100%;
+    border: 0;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+#UserIDInput {
+    width: 85%;
+}
+
+#SearchButton {
+    width: 10%;
+    margin-left: 10px;
+    font-weight: bold;
+}
+
+.InfoSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    background-color: var(--secondary-background);
+    fill-opacity: 80%;
+    border-radius: 10px;
+    margin: 10px auto;
+    padding: 25px;
+}
+
+#SearchSection {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+}
+
+#MuteButton {
+    margin: 5px auto;
+    font-weight: bold;
+}
+
+#EditButton {
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: #7B9BB6;
+    border-width: 0px 5px 10px 5px;
+    border-radius: 24px;
+    border-color: #6C90AE;
+    border-style: solid;
+    color: #FFF;
+    font-weight: bold;
+}
+
+#EditButton:active {
+    background-color: #68849B;
+    border: 0;
+    padding: 5px 15px 15px 15px;
+}

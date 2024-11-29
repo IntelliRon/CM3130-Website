@@ -204,8 +204,8 @@ footer {
 
 #UserProfileImage{
     background: white;
-    height: 256px;
-    width: 256px;
+    height: 180px;
+    width: 180px;
     border-radius: 100%;
     padding: 5px;
     object-fit: contain;

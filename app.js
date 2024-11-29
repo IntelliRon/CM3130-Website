@@ -111,7 +111,7 @@ function anonymiseUsers(inputList, ownUserID, ownUserLevel) {
     }
 
     // Moderator can see user IDs
-    if (ownUserLevel >= 10) inputList.postUserID += originalPostUserID;
+    if (ownUserLevel >= 10) inputList.postUserID += " (" + originalPostUserID + ")";
 
     /* Anonymise the commenting user IDs by replacing with random usernames.
      * This (and above posting user ID anonymisation) is random each time the page reloads 
@@ -122,7 +122,7 @@ function anonymiseUsers(inputList, ownUserID, ownUserLevel) {
             let originalCommentUserID = inputList.comments[i].commentUserID;
             if (ownUserID && inputList.comments[i].commentUserID === ownUserID) {
                 inputList.comments[i].commentUserID = "You";
-                if (ownUserLevel >= 10) inputList.comments[i].commentUserID += originalCommentUserID;
+                if (ownUserLevel >= 10) inputList.comments[i].commentUserID += " (" + originalCommentUserID + ")";
                 continue; // Skip to next comment
             }
             if (!userIDs.hasOwnProperty(inputList.comments[i].commentUserID)) {
@@ -133,7 +133,7 @@ function anonymiseUsers(inputList, ownUserID, ownUserLevel) {
                 // If the username already exists in the list, then use that username to avoid confusion when reading a thread
                 inputList.comments[i].commentUserID = userIDs[inputList.comments[i].commentUserID];
             }
-            if (ownUserLevel >= 10) inputList.comments[i].commentUserID += originalCommentUserID;
+            if (ownUserLevel >= 10) inputList.comments[i].commentUserID += " (" + originalCommentUserID + ")";
         }
     }
 

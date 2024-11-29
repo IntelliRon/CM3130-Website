@@ -62,7 +62,7 @@
                             <% for (const sublocation in locations[location]) {%>
                                 <% var locationId = locations[location][sublocation] %>
                                 <div id="<%= locationId %>" class="sublocationDiv hidden">
-                                    <p class="locationText">Sub Location <%= sublocation.replace("_", " ") %></p>
+                                    <p class="locationText"><%= sublocation.replace("_", " ") %></p>
                                 </div>
                             <% }; %>
                         </div>
